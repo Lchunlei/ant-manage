@@ -1,8 +1,6 @@
 package com.ant.app.controller;
 
 import com.ant.app.Constants;
-import com.ant.app.entity.req.AppUserForRegist;
-import com.ant.app.entity.resp.AppResult;
 import com.ant.app.entity.tree.Tree;
 import com.ant.app.entity.tree.TreeChild;
 import io.swagger.annotations.Api;

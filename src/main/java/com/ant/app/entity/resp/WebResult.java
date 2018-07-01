@@ -4,10 +4,19 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class AppResult implements Serializable {
+public class WebResult<T> implements Serializable {
     private String code = "R000";
     private String message = "操作成功";
-    private List data;
+    private Integer total;
+    private T webData;
+
+    public Integer getTotal() {
+        return total;
+    }
+
+    public void setTotal(Integer total) {
+        this.total = total;
+    }
 
     public String getCode() {
         return code;
@@ -25,16 +34,11 @@ public class AppResult implements Serializable {
         this.message = message;
     }
 
-    public List getData() {
-        return data;
+    public T getWebData() {
+        return webData;
     }
 
-    public void setData(List data) {
-        this.data = data;
-    }
-    public void setOneData(Object oneData) {
-        List da = new ArrayList();
-        da.add(oneData);
-        this.data = da;
+    public void setWebData(T webData) {
+        this.webData = webData;
     }
 }

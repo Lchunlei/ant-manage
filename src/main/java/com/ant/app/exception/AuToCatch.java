@@ -1,6 +1,6 @@
 package com.ant.app.exception;
 
-import com.ant.app.entity.resp.AppResult;
+import com.ant.app.entity.resp.WebResult;
 import com.ant.app.Constants;
 import com.google.gson.Gson;
 import org.slf4j.Logger;
@@ -24,7 +24,7 @@ public class AuToCatch implements HandlerExceptionResolver {
     public ModelAndView resolveException(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) {
         ModelAndView mv=new ModelAndView();
         Gson gson=new Gson();
-        AppResult respApp=new AppResult();
+        WebResult respApp=new WebResult();
         /*  使用response返回 */
         response.setStatus(HttpStatus.OK.value()); //设置状态码200
         response.setContentType(MediaType.APPLICATION_JSON_VALUE); //设置ContentType
