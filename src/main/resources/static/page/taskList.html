@@ -137,27 +137,35 @@
 				label: 'ID',
 				width: 100,
 				sortable: 'default',
-				name: 'userId'
+				name: 'taskId'
 			},{
-				label:'昵称',
+				label:'客户ID',
 				width: 150,
 				sortable: 'default',
-				name:'nickName'
+				name:'userId'
 			},{
-				label:'状态',
-                name: 'nickName',
+				label:'标题',
+                name: 'title',
 				width:150
 			},{
-				label: '设备',
+				label: '投资金额',
+                name:'jobAmount',
 				width: 150	
 			},{
-				label: '用户地址',
+				label: '链接地址',
+                name:'jobUrl',
 				minWidth: 200	
 			},{
-				label: '创建日期',
+				label: '阅读量',
+                name:'readVol',
 				width: 120	
 			},{
-				label: '是否审核',
+                label: '有赏阅读量',
+                name:'maxRead',
+                width: 120
+            },{
+				label: '上架状态',
+                name:'verifyCode',
 				width:100	
 			}];
 					
@@ -183,7 +191,7 @@
     //请求数据列表
     $.ajax({
         type : "post",
-        url : "./ant/manage/user/list",
+        url : "./ant/task/list",
         async : false,
         dataType : "json",
         data : {
@@ -191,7 +199,6 @@
             joinTime : "",
             pageSize : 10
         },
-
         success : function(data) {
             console.log("Start.....");
             var tbody = [];
@@ -202,21 +209,23 @@
                     console.log(i+"--");
                     var tsun = [];
                     console.log(i+"--"+thisList[i].nickName);
+                    tsun.push(thisList[i].taskId);
                     tsun.push(thisList[i].userId);
-                    tsun.push(thisList[i].nickName);
-                    tsun.push(thisList[i].status==0?'启用中':'禁用中');
-                    tsun.push(thisList[i].plantForm);
-                    tsun.push(thisList[i].address);
-                    tsun.push(thisList[i].createTime);
-                    tsun.push("已审核");
-                    var oper = [{label:'下架',id:thisList[i].userId,onclick:function(){
+                    tsun.push(thisList[i].title);
+                    tsun.push(thisList[i].jobAmount);
+                    tsun.push(thisList[i].jobUrl);
+                    tsun.push(thisList[i].readVol);
+                    tsun.push(thisList[i].maxRead);
+                    tsun.push(thisList[i].verifyCode==2?'已下架':'上架中');
+
+                    var oper = [{label:'下架',id:thisList[i].taskId,onclick:function(){
                         $.ajax({
-                            url: "./ant/manage/user/status",
+                            url: "./ant/task/update",
                             dataType: 'json',
                             method: 'GET',
                             data : {
-                                userId : this.id,
-                                status : 1
+                                taskId : this.id,
+                                verifyCode : 2
                             },
                             success: function(data) {
                                 alert(data.message);
@@ -227,14 +236,14 @@
                             }
                         });
                         //alert('停用'+this.id);
-                    }},{label:'上架',id:thisList[i].userId,onclick: function(){
+                    }},{label:'上架',id:thisList[i].taskId,onclick: function(){
                         $.ajax({
-                            url: "./ant/manage/user/status",
+                            url: "./ant/task/update",
                             dataType: 'json',
                             method: 'GET',
                             data : {
-                                userId : this.id,
-                                status : 0
+                                taskId : this.id,
+                                verifyCode : 1
                             },
                             success: function(data) {
                                 alert(data.message);
@@ -263,7 +272,8 @@
             //分页工具
             $('.pagination').pagination(data.total,{
                 callback: function(page){
-                    alert(page);
+                    findByT(page+1);
+                    //alert(page);
                 },
                 display_msg: false
             });
@@ -284,6 +294,102 @@
 		}
     });
 
+	//条件查询
+    function findByT(nowPage) {
+        $.ajax({
+            type : "post",
+            url : "./ant/task/list",
+            async : false,
+            dataType : "json",
+            data : {
+                pageNum : nowPage,
+                joinTime : "",
+                pageSize : 10
+            },
+            success : function(data) {
+                var tbody = [];
+                if("R000"==data.code){
+                    var thisList = data.webData;
+                    console.log("--"+thisList.length);
+                    for(var i in thisList){
+                        console.log(i+"--");
+                        var tsun = [];
+                        console.log(i+"--"+thisList[i].nickName);
+                        tsun.push(thisList[i].taskId);
+                        tsun.push(thisList[i].userId);
+                        tsun.push(thisList[i].title);
+                        tsun.push(thisList[i].jobAmount);
+                        tsun.push(thisList[i].jobUrl);
+                        tsun.push(thisList[i].readVol);
+                        tsun.push(thisList[i].maxRead);
+                        tsun.push(thisList[i].verifyCode==2?'已下架':'上架中');
+
+                        var oper = [{label:'下架',id:thisList[i].taskId,onclick:function(){
+                            $.ajax({
+                                url: "./ant/task/update",
+                                dataType: 'json',
+                                method: 'GET',
+                                data : {
+                                    taskId : this.id,
+                                    verifyCode : 2
+                                },
+                                success: function(data) {
+                                    alert(data.message);
+                                },
+                                error: function(xhr) {
+                                    // 导致出错的原因较多，以后再研究
+                                    alert("服务异常！！");
+                                }
+                            });
+                            //alert('停用'+this.id);
+                        }},{label:'上架',id:thisList[i].taskId,onclick: function(){
+                            $.ajax({
+                                url: "./ant/task/update",
+                                dataType: 'json',
+                                method: 'GET',
+                                data : {
+                                    taskId : this.id,
+                                    verifyCode : 1
+                                },
+                                success: function(data) {
+                                    alert(data.message);
+                                },
+                                error: function(xhr) {
+                                    // 导致出错的原因较多，以后再研究
+                                    alert("服务异常！！");
+                                }
+                            });
+                            //alert('启用'+tsun[0]);
+                        }}];
+                        tsun.push(oper);
+                        tbody.push(tsun);
+                    }
+                    tbody.pop();
+                }else{
+                    alert(data.message);
+                }
+                console.log(data.code);
+                console.log(data.message);
+                console.log("over..");
+                /// 模拟异步
+                setTimeout(function(){
+                    $('.grid').Grid('setData',tbody, head);
+                },20);
+//                //分页工具
+//                $('.pagination').pagination(data.total,{
+//                    callback: function(page){
+//                        findByT(page);
+//                        //alert(page);
+//                    },
+//                    display_msg: false
+//                });
+            },
+            error : function(XMLHttpRequest, textStatus, errorThrown) {
+
+                //$.messager.alert("提示信息", "查询出现错误 ！", 'error');
+            }
+        });
+    }
 
 </script>
 </html>

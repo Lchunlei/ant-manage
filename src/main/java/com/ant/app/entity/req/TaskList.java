@@ -8,6 +8,7 @@ public class TaskList {
     private Integer pageNum;
     private Integer pageSize;
     private Integer seleTime;//过滤时间段
+    private Integer startNum;
     private String nameOrId;//按名称和ID查询
     private String taskId;
     private String title;
@@ -20,6 +21,14 @@ public class TaskList {
                 ", seleTime=" + seleTime +
                 ", nameOrId='" + nameOrId + '\'' +
                 '}';
+    }
+
+    public Integer getStartNum() {
+        return startNum;
+    }
+
+    public void setStartNum(Integer startNum) {
+        this.startNum = startNum;
     }
 
     public String getTaskId() {

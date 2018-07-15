@@ -33,7 +33,7 @@ public class TaskController {
     @ApiOperation(value = "任务列表", notes = "任务列表",response=String.class)
     @ApiResponses({@ApiResponse(code = 201, message = "申请成功时返回成功信息")})
     @RequestMapping(value = "/list",method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
-    public WebResult getlist(@RequestBody TaskList taskList){
+    public WebResult getlist(TaskList taskList){
         WebResult<List<SysTask>> result = new WebResult();
         log.info("任务列表请求参数--------》"+taskList);
         taskService.getTaskList(taskList,result);

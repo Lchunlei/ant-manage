@@ -27,6 +27,8 @@ public class TaskServiceImpl {
             taskList.setPageNum(1);
             taskList.setPageSize(10);
         }
+        int startNum = (taskList.getPageNum()-1)*taskList.getPageSize();
+        taskList.setStartNum(startNum);
         if(!StringUtils.isNullOrEmpty(taskList.getNameOrId())){
             if(CheckReqUtil.isNumber(taskList.getNameOrId())){
                 taskList.setTaskId(taskList.getNameOrId());
