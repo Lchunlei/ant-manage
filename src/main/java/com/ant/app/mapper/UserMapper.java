@@ -1,13 +1,11 @@
 package com.ant.app.mapper;
 
 import com.ant.app.model.UserInfo;
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Param;
-import org.apache.ibatis.annotations.Select;
-import org.apache.ibatis.annotations.Update;
+import com.ant.app.sql.UserSql;
+import org.apache.ibatis.annotations.*;
 import org.springframework.stereotype.Repository;
-
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by liuchunlei on 2018/6/13 0027.
@@ -15,12 +13,19 @@ import java.util.List;
 @Repository
 public interface UserMapper {
 
-    @Select("SELECT * FROM sys_user limit ${startNum},${pageSize}")
-    List<UserInfo> selectBypage(@Param("startNum") Integer startNum, @Param("pageSize") Integer pageSize);
-    @Select("SELECT COUNT(userId) FROM sys_user")
-    int selecttotallNum();
+//    @Select("SELECT * FROM sys_user limit ${startNum},${pageSize}")
+//    List<UserInfo> selectBypage(@Param("startNum") Integer startNum, @Param("pageSize") Integer pageSize);
+//    @Select("SELECT COUNT(userId) FROM sys_user")
+//    int selecttotallNum();
+
+    @SelectProvider(type=UserSql.class, method="userList")
+    List<UserInfo> selectBypage(Map<String,Object> param);
+    @SelectProvider(type=UserSql.class, method="userListTotal")
+    int selecttotallNum(Map<String,Object> param);
 
     @Update("UPDATE sys_user SET status=${status} WHERE userId=${userId}")
     int updateUserStatus(@Param("status")Integer status,@Param("userId")Integer userId);
+
+
 
 }

@@ -1,11 +1,22 @@
 package com.ant.app.model;
 
-import java.io.Serializable;
+import java.util.Date;
 
-public class Banner implements Serializable{
+public class Banner{
+    private Integer bannerId;
     private String title;
     private String imgUrl;
     private String actionUrl;
+    private Integer channelId;
+    private Date createTime;
+
+    public Integer getBannerId() {
+        return bannerId;
+    }
+
+    public void setBannerId(Integer bannerId) {
+        this.bannerId = bannerId;
+    }
 
     public String getTitle() {
         return title;
@@ -29,5 +40,21 @@ public class Banner implements Serializable{
 
     public void setActionUrl(String actionUrl) {
         this.actionUrl = actionUrl;
+    }
+
+    public Integer getChannelId() {
+        return channelId;
+    }
+
+    public void setChannelId(Integer channelId) {
+        this.channelId = channelId;
+    }
+
+    public Date getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(Date createTime) {
+        this.createTime = createTime;
     }
 }

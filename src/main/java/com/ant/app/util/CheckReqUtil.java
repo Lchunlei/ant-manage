@@ -1,11 +1,15 @@
 package com.ant.app.util;
 
-import com.ant.app.entity.req.UserList;
+import java.util.regex.Pattern;
 
 /**
  * Created by sfb_liuchunlei on 2018/6/23.
  */
 public class CheckReqUtil {
 
+    public static Boolean isNumber(String str){
+        Pattern pattern = Pattern.compile("^[-\\+]?[\\d]*$");
+        return pattern.matcher(str).matches();
+    }
 
 }

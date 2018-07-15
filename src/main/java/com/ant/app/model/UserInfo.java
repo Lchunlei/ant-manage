@@ -10,15 +10,15 @@ public class UserInfo {
     private Integer userId;
     private String antNick;//平台昵称
     private String userIconUrl;
-    private Boolean isRealName;
+    private String realName;
     private String alias;//可用于登陆
-    private String passWord;
-    private int sex;//0男1女
-    private int age;
+    private String password;
+    private Integer sex;//0男1女
+    private Integer age;
     private String birthday;
-    private int job;
+    private Integer job;
     private String address;
-    private int bankId;
+    private Integer bankId;
     private Integer status;//用户状态0启用1禁用
     private Integer inviterId;//邀请人ID
     private Date createTime;
@@ -31,31 +31,8 @@ public class UserInfo {
     private Integer verifyStatus;//0审核通过1失败
     private String verifyMsg;
     private Date verifyTime;
-
-
-    @Override
-    public String toString() {
-        return "UserInfo{" +
-                "userId=" + userId +
-                ", antNick='" + antNick + '\'' +
-                ", isRealName=" + isRealName +
-                ", alias='" + alias + '\'' +
-                ", uId='" + uId + '\'' +
-                ", nickName='" + nickName + '\'' +
-                ", status='" + status + '\'' +
-                ", verifyStatus=" + verifyStatus +
-                ", verifyMsg='" + verifyMsg + '\'' +
-                ", verifyTime=" + verifyTime +
-                '}';
-    }
-
-    public Integer getStatus() {
-        return status;
-    }
-
-    public void setStatus(Integer status) {
-        this.status = status;
-    }
+    private String idCard;
+    private Integer realNameStatus;//实名状态0已经认证
 
     public String getPhoneNum() {
         return phoneNum;
@@ -89,12 +66,12 @@ public class UserInfo {
         this.userIconUrl = userIconUrl;
     }
 
-    public Boolean getRealName() {
-        return isRealName;
+    public String getRealName() {
+        return realName;
     }
 
-    public void setRealName(Boolean realName) {
-        isRealName = realName;
+    public void setRealName(String realName) {
+        this.realName = realName;
     }
 
     public String getAlias() {
@@ -105,27 +82,27 @@ public class UserInfo {
         this.alias = alias;
     }
 
-    public String getPassWord() {
-        return passWord;
+    public String getPassword() {
+        return password;
     }
 
-    public void setPassWord(String passWord) {
-        this.passWord = passWord;
+    public void setPassword(String password) {
+        this.password = password;
     }
 
-    public int getSex() {
+    public Integer getSex() {
         return sex;
     }
 
-    public void setSex(int sex) {
+    public void setSex(Integer sex) {
         this.sex = sex;
     }
 
-    public int getAge() {
+    public Integer getAge() {
         return age;
     }
 
-    public void setAge(int age) {
+    public void setAge(Integer age) {
         this.age = age;
     }
 
@@ -137,11 +114,11 @@ public class UserInfo {
         this.birthday = birthday;
     }
 
-    public int getJob() {
+    public Integer getJob() {
         return job;
     }
 
-    public void setJob(int job) {
+    public void setJob(Integer job) {
         this.job = job;
     }
 
@@ -153,12 +130,20 @@ public class UserInfo {
         this.address = address;
     }
 
-    public int getBankId() {
+    public Integer getBankId() {
         return bankId;
     }
 
-    public void setBankId(int bankId) {
+    public void setBankId(Integer bankId) {
         this.bankId = bankId;
+    }
+
+    public Integer getStatus() {
+        return status;
+    }
+
+    public void setStatus(Integer status) {
+        this.status = status;
     }
 
     public Integer getInviterId() {
@@ -247,5 +232,21 @@ public class UserInfo {
 
     public void setVerifyTime(Date verifyTime) {
         this.verifyTime = verifyTime;
+    }
+
+    public String getIdCard() {
+        return idCard;
+    }
+
+    public void setIdCard(String idCard) {
+        this.idCard = idCard;
+    }
+
+    public Integer getRealNameStatus() {
+        return realNameStatus;
+    }
+
+    public void setRealNameStatus(Integer realNameStatus) {
+        this.realNameStatus = realNameStatus;
     }
 }

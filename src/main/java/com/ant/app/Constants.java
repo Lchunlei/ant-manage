@@ -11,6 +11,7 @@ public class Constants {
     public static final String NOT_MORE_INFO = "没有更多数据";
     public static final String DB_ERROR = "本地数据库异常";
     public static final String CONNECT_ERROR = "网络繁忙，请稍候";
+    public static final String PARAM_ERROR = "参数错误，请重新输入！";
 
 
 }
