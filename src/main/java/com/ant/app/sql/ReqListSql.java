@@ -18,13 +18,13 @@ public class ReqListSql {
                     WHERE("createTime>#{stime}");
                 }
                 if(reqList.getReqId()!=null) {
-                    WHERE(reqList.getColumnId()+"=${reqId}");
+                    WHERE(reqList.getColumnId()+"=#{reqId}");
                 }
                 if(reqList.getReqName()!=null) {
                     WHERE(reqList.getColumnName()+" LIKE CONCAT('%', #{reqName},'%')");
                 }
             }
-        }.toString()+" limit" + " #{startNum},#{pageSize} ORDER BY "+reqList.getTableKey()+" DESC";
+        }.toString()+ " ORDER BY "+reqList.getTableKey()+" DESC"+" limit" + " #{startNum},#{pageSize}";
     }
 
     public String reqListTotal(ReqList reqList){
@@ -36,7 +36,7 @@ public class ReqListSql {
                     WHERE("createTime>#{stime}");
                 }
                 if(reqList.getReqId()!=null) {
-                    WHERE(reqList.getColumnId()+"=${reqId}");
+                    WHERE(reqList.getColumnId()+"=#{reqId}");
                 }
                 if(reqList.getReqName()!=null) {
                     WHERE(reqList.getColumnName()+" LIKE CONCAT('%', #{reqName},'%')");

@@ -6,6 +6,7 @@ import com.ant.app.entity.req.*;
 import com.ant.app.entity.resp.WebResult;
 import com.ant.app.model.UserInfo;
 import com.ant.app.service.UserServiceImpl;
+import com.ant.app.systable.SysTable;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
@@ -42,10 +43,12 @@ public class UserController {
     @ApiOperation(value = "用户列表", notes = "用户列表",response=String.class)
     @ApiResponses({@ApiResponse(code = 201, message = "申请成功时返回成功信息")})
     @RequestMapping(value = "/user/list",method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
-    public WebResult regApp(UserList userList){
+    public WebResult regApp(ReqList reqList){
         WebResult<List<UserInfo>> appResult = new WebResult();
-        log.info("用户列表请求参数--------》"+userList);
-        userService.getUserList(userList,appResult);
+        log.info("用户列表请求参数--------》"+reqList);
+        reqList.setTable(SysTable.SYS_USER,SysTable.SYS_USER_KEY,SysTable.SYS_USER_KEY,SysTable.SYS_USER_NAME);
+        log.info("用户列表请求参数--------》"+reqList);
+        userService.getUserList(reqList,appResult);
         log.info("--------》"+appResult.getWebData());
         return appResult;
     }

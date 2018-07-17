@@ -3,6 +3,7 @@ package com.ant.app.entity.req;
 import com.ant.app.Constants;
 import com.ant.app.util.CheckReqUtil;
 import com.ant.app.util.TimeUtil;
+import org.springframework.util.StringUtils;
 
 import java.util.Date;
 
@@ -22,10 +23,10 @@ public class ReqList {
     private String columnName;//name对应列名
 
 
-    private Date stime;
+    private String stime;
     private Integer reqId;
     private String reqName;
-
+    private Integer startNum;
     @Override
     public String toString() {
         return "ReqList{" +
@@ -33,29 +34,54 @@ public class ReqList {
                 ", pageSize=" + pageSize +
                 ", seleTime=" + seleTime +
                 ", nameOrId='" + nameOrId + '\'' +
+                ", tableName='" + tableName + '\'' +
+                ", tableKey='" + tableKey + '\'' +
+                ", columnId='" + columnId + '\'' +
+                ", columnName='" + columnName + '\'' +
+                ", stime=" + stime +
+                ", reqId=" + reqId +
+                ", reqName='" + reqName + '\'' +
                 '}';
     }
 
-    public void setTable(String tname,String tkey,String cid,String cname){
-        if(this.pageSize==null||this.pageSize==0){
+    public void setTable(String tname, String tkey, String cid, String cname){
+        if(this.pageNum==null||this.pageNum==0){
             this.setPageNum(1);
-            this.setPageSize(10);
         }
-        if(this.seleTime!=null){
+        this.setPageSize(10);
+        if(this.seleTime!=null&&this.seleTime>2){
             this.setStime(TimeUtil.deleDay(this.seleTime));
         }
-        if(this.nameOrId!=null){
+        if(!StringUtils.isEmpty(this.nameOrId)){
             if(CheckReqUtil.isNumber(this.nameOrId)){
                 this.setReqId(Integer.parseInt(this.nameOrId));
             }else{
                 this.setReqName(this.nameOrId);
             }
         }
+        this.setStartNum((this.getPageNum()-1)*this.getPageSize());
         this.setTableName(tname);
         this.setTableKey(tkey);
         this.setColumnName(cname);
         this.setColumnId(cid);
     }
+
+    public Integer getStartNum() {
+        return startNum;
+    }
+
+    public void setStartNum(Integer startNum) {
+        this.startNum = startNum;
+    }
+
+    public String getStime() {
+        return stime;
+    }
+
+    public void setStime(String stime) {
+        this.stime = stime;
+    }
+
     public String getTableKey() {
         return tableKey;
     }
@@ -86,14 +112,6 @@ public class ReqList {
 
     public void setTableName(String tableName) {
         this.tableName = tableName;
-    }
-
-    public Date getStime() {
-        return stime;
-    }
-
-    public void setStime(Date stime) {
-        this.stime = stime;
     }
 
     public Integer getReqId() {

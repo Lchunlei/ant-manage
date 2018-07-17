@@ -1,6 +1,8 @@
 package com.ant.app.mapper;
 
+import com.ant.app.entity.req.ReqList;
 import com.ant.app.model.UserInfo;
+import com.ant.app.sql.ReqListSql;
 import com.ant.app.sql.UserSql;
 import org.apache.ibatis.annotations.*;
 import org.springframework.stereotype.Repository;
@@ -18,10 +20,10 @@ public interface UserMapper {
 //    @Select("SELECT COUNT(userId) FROM sys_user")
 //    int selecttotallNum();
 
-    @SelectProvider(type=UserSql.class, method="userList")
-    List<UserInfo> selectBypage(Map<String,Object> param);
-    @SelectProvider(type=UserSql.class, method="userListTotal")
-    int selecttotallNum(Map<String,Object> param);
+    @SelectProvider(type=ReqListSql.class, method="reqList")
+    List<UserInfo> selectBypage(ReqList reqList);
+    @SelectProvider(type=ReqListSql.class, method="reqListTotal")
+    int selecttotallNum(ReqList reqList);
 
     @Update("UPDATE sys_user SET status=${status} WHERE userId=${userId}")
     int updateUserStatus(@Param("status")Integer status,@Param("userId")Integer userId);

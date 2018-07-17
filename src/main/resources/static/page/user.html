@@ -31,27 +31,34 @@
                                 <span class="text">全部</span>
                             </span>
                             -->
-                            <form action="">
+                            <form id="userList">
                             <span class="choose">
                                 <span class="checkboxouter">
-                                    <input type="radio" name="time" value="3"/>
+                                    <input type="radio" name="seleTime" value="3"/>
                                     <span class="radio"></span>
                                 </span>
                                 <span class="text">近3天</span>
                             </span>
                             <span class="choose">
                                 <span class="checkboxouter">
-                                    <input type="radio" name="time" value="7"/>
+                                    <input type="radio" name="seleTime" value="7"/>
                                     <span class="radio"></span>
                                 </span>
                                 <span class="text">近一周</span>
                             </span>
                             <span class="choose">
                                 <span class="checkboxouter">
-                                    <input type="radio" name="time" value="30"/>
+                                    <input type="radio" name="seleTime" value="30"/>
                                     <span class="radio"></span>
                                 </span>
                                 <span class="text">近一月</span>
+                            </span>
+                            <span class="choose">
+                                <span class="checkboxouter">
+                                    <input type="radio" name="seleTime" value=""/>
+                                    <span class="radio"></span>
+                                </span>
+                                <span class="text">全部</span>
                             </span>
                             <!--
                             <span class="choose">
@@ -72,12 +79,12 @@
                     <div class="kv-item ue-clear">
                         <label>昵称或ID:</label>
                         <div class="kv-item-content">
-                            <input name="nameorid"/>
+                            <input name="nameOrId"/>
                         </div>
                     </div>
                 </div>
                 <div class="search-button">
-                	<input class="button" type="button" onclick="" value="搜索一下" />
+                	<input class="button" type="button" onclick="getUserList(1)" value="搜索一下" />
                 </div>
                 </form>
              </div>
@@ -151,131 +158,37 @@
 				width:150
 			},{
 				label: '设备',
-				width: 150	
+				width: 150
 			},{
 				label: '用户地址',
-				minWidth: 200	
+				minWidth: 200
 			},{
 				label: '创建日期',
-				width: 120	
+				width: 120
 			},{
 				label: '是否审核',
-				width:100	
+				width:100
 			}];
-					
+
 		$('.grid').Grid({
 			thead: head,
 			tbody: null,
 			height:400,
 			checkbox: {
-				single:true	
+				single:true
 			},
 			operator: {
 				type : "normal",
-				width : 100	
+				width : 100
 			},
 			sortCallBack : function(name,index,type){
 				alert(name+","+index+','+type);
 			}
-			
+
 		});
-	
+
 	$('.grid').Grid('addLoading');
 
-    //请求数据列表
-    $.ajax({
-        type : "post",
-        url : "./ant/manage/user/list",
-        async : false,
-        dataType : "json",
-        data : {
-            pageNum : 1,
-            joinTime : "",
-            pageSize : 10
-        },
-
-        success : function(data) {
-            console.log("Start.....");
-            var tbody = [];
-            if("R000"==data.code){
-                var thisList = data.webData;
-                console.log("--"+thisList.length);
-                for(var i in thisList){
-                    console.log(i+"--");
-                    var tsun = [];
-                    console.log(i+"--"+thisList[i].nickName);
-                    tsun.push(thisList[i].userId);
-                    tsun.push(thisList[i].nickName);
-                    tsun.push(thisList[i].status==0?'启用中':'禁用中');
-                    tsun.push(thisList[i].plantForm);
-                    tsun.push(thisList[i].address);
-                    tsun.push(thisList[i].createTime);
-                    tsun.push("已审核");
-                    var oper = [{label:'停用',id:thisList[i].userId,onclick:function(){
-                        $.ajax({
-                            url: "./ant/manage/user/status",
-                            dataType: 'json',
-                            method: 'GET',
-                            data : {
-                                userId : this.id,
-                                status : 1
-                            },
-                            success: function(data) {
-                                alert(data.message);
-                            },
-                            error: function(xhr) {
-                                // 导致出错的原因较多，以后再研究
-                                alert("服务异常！！");
-                            }
-                        });
-                        //alert('停用'+this.id);
-                    }},{label:'启用',id:thisList[i].userId,onclick: function(){
-                        $.ajax({
-                            url: "./ant/manage/user/status",
-                            dataType: 'json',
-                            method: 'GET',
-                            data : {
-                                userId : this.id,
-                                status : 0
-                            },
-                            success: function(data) {
-                                alert(data.message);
-                            },
-                            error: function(xhr) {
-                                // 导致出错的原因较多，以后再研究
-                                alert("服务异常！！");
-                            }
-                        });
-                        //alert('启用'+tsun[0]);
-                    }}];
-                    tsun.push(oper);
-                    tbody.push(tsun);
-                }
-                tbody.pop();
-            }else{
-                alert(data.message);
-            }
-            console.log(data.code);
-            console.log(data.message);
-            console.log("over..");
-            /// 模拟异步
-            setTimeout(function(){
-                $('.grid').Grid('setData',tbody, head);
-            },20);
-            //分页工具
-            $('.pagination').pagination(data.total,{
-                callback: function(page){
-                    alert(page);
-                },
-                display_msg: false
-            });
-        },
-        error : function(XMLHttpRequest, textStatus, errorThrown) {
-
-            //$.messager.alert("提示信息", "查询出现错误 ！", 'error');
-        }
-    });
-	
 	$('.search-box input[type=radio]').click(function(e) {
         if($(this).prop('checked')){
 			if($(this).attr('data-define') === 'define'){
@@ -285,8 +198,119 @@
 			}
 		}
     });
-    //条件搜索
 
+    var allNum = 0;
+    //首次打开页面加载
+    getUserList(1);
+    //条件搜索
+    function getUserList(pageNum){
+        if(pageNum==1){
+            fenye();
+        }
+        var userform = new FormData(document.getElementById("userList"));
+        userform.append("pageSize", 10);
+        userform.append("pageNum", pageNum);
+        $.ajax({
+            url:"./ant/manage/user/list",
+            type:"post",
+            data:userform,
+            processData:false,
+            contentType:false,
+            success:function(data){
+                console.log("over.."+data.message);
+                console.log("Start.....");
+                var tbody = [];
+                if("R000"==data.code){
+                    var thisList = data.webData;
+                    console.log("--"+thisList.length);
+                    for(var i in thisList){
+                        console.log(i+"--");
+                        var tsun = [];
+                        console.log(i+"--"+thisList[i].nickName);
+                        tsun.push(thisList[i].userId);
+                        tsun.push(thisList[i].nickName);
+                        tsun.push(thisList[i].status==0?'启用中':'禁用中');
+                        tsun.push(thisList[i].plantForm);
+                        tsun.push(thisList[i].address);
+                        tsun.push(thisList[i].createTime);
+                        tsun.push("已审核");
+                        var oper = [{label:'停用',id:thisList[i].userId,onclick:function(){
+                                $.ajax({
+                                    url: "./ant/manage/user/status",
+                                    dataType: 'json',
+                                    method: 'GET',
+                                    data : {
+                                        userId : this.id,
+                                        status : 1
+                                    },
+                                    success: function(data) {
+                                        alert(data.message);
+                                    },
+                                    error: function(xhr) {
+                                        // 导致出错的原因较多，以后再研究
+                                        alert("服务异常！！");
+                                    }
+                                });
+                                //alert('停用'+this.id);
+                            }},{label:'启用',id:thisList[i].userId,onclick: function(){
+                                $.ajax({
+                                    url: "./ant/manage/user/status",
+                                    dataType: 'json',
+                                    method: 'GET',
+                                    data : {
+                                        userId : this.id,
+                                        status : 0
+                                    },
+                                    success: function(data) {
+                                        alert(data.message);
+                                    },
+                                    error: function(xhr) {
+                                        // 导致出错的原因较多，以后再研究
+                                        alert("服务异常！！");
+                                    }
+                                });
+                                //alert('启用'+tsun[0]);
+                            }}];
+                        tsun.push(oper);
+                        tbody.push(tsun);
+                    }
+                    tbody.pop();
+                }else{
+                    //alert(data.message);
+                }
+                console.log(data.code);
+                console.log(data.message);
+                console.log("over.."+data.total);
+                allNum=data.total;
+                //重新加载表单
+                $('.grid').Grid('setData',tbody, head);
+
+            },
+            error:function(e){
+                alert("错误！！");
+
+            }
+        });
+    }
+    function fenye() {
+        console.log("*********>>>>>"+allNum);
+        if(allNum==0){
+            /// 模拟异步
+            setTimeout(function(){
+                fenye();
+            },500);
+        }else {
+            //分页工具
+            $('.pagination').pagination(allNum,{
+                callback: function(page){
+                    getUserList(page+1);
+                    //page为当前页数
+                },
+                display_msg: false
+            });
+        }
+
+    }
 
 </script>
 </html>
