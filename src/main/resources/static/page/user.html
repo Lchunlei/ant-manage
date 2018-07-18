@@ -84,7 +84,7 @@
                     </div>
                 </div>
                 <div class="search-button">
-                	<input class="button" type="button" onclick="getUserList(1)" value="搜索一下" />
+                	<input class="button" type="button" onclick="getUserList(0)" value="搜索一下" />
                 </div>
                 </form>
              </div>
@@ -201,12 +201,9 @@
 
     var allNum = 0;
     //首次打开页面加载
-    getUserList(1);
+    getUserList(0);
     //条件搜索
     function getUserList(pageNum){
-        if(pageNum==1){
-            fenye();
-        }
         var userform = new FormData(document.getElementById("userList"));
         userform.append("pageSize", 10);
         userform.append("pageNum", pageNum);
@@ -231,7 +228,11 @@
                         tsun.push(thisList[i].nickName);
                         tsun.push(thisList[i].status==0?'启用中':'禁用中');
                         tsun.push(thisList[i].plantForm);
-                        tsun.push(thisList[i].address);
+                        if(thisList[i].address==null){
+                            tsun.push("未知");
+                        }else{
+                            tsun.push(thisList[i].address);
+                        }
                         tsun.push(thisList[i].createTime);
                         tsun.push("已审核");
                         var oper = [{label:'停用',id:thisList[i].userId,onclick:function(){
@@ -284,7 +285,16 @@
                 allNum=data.total;
                 //重新加载表单
                 $('.grid').Grid('setData',tbody, head);
-
+                if(pageNum==0){
+                    //分页工具
+                    $('.pagination').pagination(allNum,{
+                        callback: function(page){
+                            getUserList(page+1);
+                            //page为当前页数
+                        },
+                        display_msg: false
+                    });
+                }
             },
             error:function(e){
                 alert("错误！！");
@@ -292,25 +302,7 @@
             }
         });
     }
-    function fenye() {
-        console.log("*********>>>>>"+allNum);
-        if(allNum==0){
-            /// 模拟异步
-            setTimeout(function(){
-                fenye();
-            },500);
-        }else {
-            //分页工具
-            $('.pagination').pagination(allNum,{
-                callback: function(page){
-                    getUserList(page+1);
-                    //page为当前页数
-                },
-                display_msg: false
-            });
-        }
 
-    }
 
 </script>
 </html>
