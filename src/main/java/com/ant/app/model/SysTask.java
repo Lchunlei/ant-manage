@@ -7,6 +7,7 @@ public class SysTask {
 
     private Integer taskId;
     private Integer userId;
+    private String nickName;
     private Integer type;//任务类型
     private String title;
     private Integer jobAmount;//投资佣金，单位分
@@ -36,6 +37,14 @@ public class SysTask {
                 ", readVol=" + readVol +
                 ", maxRead=" + maxRead +
                 '}';
+    }
+
+    public String getNickName() {
+        return nickName;
+    }
+
+    public void setNickName(String nickName) {
+        this.nickName = nickName;
     }
 
     public Integer getMaxRead() {

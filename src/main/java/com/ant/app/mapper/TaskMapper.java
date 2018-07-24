@@ -1,9 +1,8 @@
 package com.ant.app.mapper;
 
-import com.ant.app.entity.req.TaskList;
-import com.ant.app.model.Banner;
+import com.ant.app.entity.req.ReqList;
 import com.ant.app.model.SysTask;
-import com.ant.app.sql.TaskSql;
+import com.ant.app.sql.ReqListSql;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.SelectProvider;
@@ -18,10 +17,10 @@ import java.util.List;
 @Repository
 public interface TaskMapper {
 
-    @SelectProvider(type=TaskSql.class, method="taskList")
-    List<SysTask> selectBypage(TaskList taskList);
-    @SelectProvider(type=TaskSql.class, method="taskListTotal")
-    int selecttotallNum(TaskList taskList);
+    @SelectProvider(type=ReqListSql.class, method="reqList")
+    List<SysTask> selectBypage(ReqList reqList);
+    @SelectProvider(type=ReqListSql.class, method="reqListTotal")
+    int selecttotallNum(ReqList reqList);
 
     @Update("UPDATE sys_task SET verifyCode=${verifyCode} WHERE taskId=${taskId}")
     int updateTaskStatus(@Param("verifyCode")Integer verifyCode, @Param("taskId")Integer taskId);

@@ -24,7 +24,7 @@ public class TaskSql {
                     WHERE("title LIKE CONCAT('%', #{title},'%')");
                 }
             }
-        }.toString()+" limit" + " #{startNum},#{pageSize}";
+        }.toString()+ " ORDER BY taskId DESC"+" limit" + " #{startNum},#{pageSize}";
     }
 
     public String taskListTotal(TaskList taskList){

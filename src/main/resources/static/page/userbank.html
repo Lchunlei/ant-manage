@@ -7,7 +7,7 @@
     <link rel="stylesheet" type="text/css" href="../css/WdatePicker.css" />
     <link rel="stylesheet" type="text/css" href="../css/skin_/table.css" />
     <link rel="stylesheet" type="text/css" href="../css/jquery.grid.css" />
-    <title>系统任务管理</title>
+    <title>用户资金列表</title>
 </head>
 <body>
 <div id="container">
@@ -15,7 +15,7 @@
     <div id="bd">
         <div id="main">
             <div class="search-box ue-clear">
-                <form id="sTaskList">
+                <form id="uBankList">
                     <div class="search-area">
                         <div class="kv-item ue-clear">
                             <label>选择时间：</label>
@@ -82,7 +82,7 @@
                         </div>
                     </div>
                     <div class="search-button">
-                        <input class="button" type="button" onclick="getSTaskList(0)" value="搜索一下" />
+                        <input class="button" type="button" onclick="getUbankList(0)" value="搜索一下" />
                     </div>
                 </form>
             </div>
@@ -144,7 +144,7 @@
     var head = [{
         label: 'ID',
         width: 25,
-        name: 'taskId'
+        name: 'bankId'
     },{
         label:'用户ID',
         width: 25,
@@ -152,34 +152,27 @@
     },{
         label:'用户昵称',
         name: 'nickName',
-        width:80
-    },{
-        label: '标题',
-        width:100,
-        name: 'title'
-    },{
-        label: '二级标题',
-        name: 'jobSeTitle',
         width:150
     },{
-        label: '金额',
-        name: 'jobAmount',
-        width:25
+        label: '系统积分',
+        width:110,
+        name: 'sysCoin'
     },{
-        label: '链接',
-        name: 'jobUrl',
-        width:150
+        label: '当前收益',
+        name: 'nowMoney',
+        width:110
     },{
-        label: '状态',
-        name: 'verifyCode',
-        width:25
+        label: '已收益',
+        name: 'earnMoney',
+        width:110
     },{
-        label: '有效日期',
-        width:150
+        label: '总充值',
+        name: 'czMoney',
+        width:110
     },{
         label: '创建日期',
         name: 'createTime',
-        width:100
+        width:180
     }];
 
     $('.grid').Grid({
@@ -213,14 +206,14 @@
 
     var allNum = 0;
     //首次打开页面加载
-    getSTaskList(0);
+    getUbankList(0);
     //条件搜索
-    function getSTaskList(pageNum){
-        var nowform = new FormData(document.getElementById("sTaskList"));
+    function getUbankList(pageNum){
+        var nowform = new FormData(document.getElementById("uBankList"));
         nowform.append("pageSize", 10);
         nowform.append("pageNum", pageNum);
         $.ajax({
-            url:"./ant/task/list",
+            url:"./ant/income/user/list",
             type:"post",
             data:nowform,
             processData:false,
@@ -235,63 +228,20 @@
                     for(var i in thisList){
                         console.log(i+"--");
                         var tsun = [];
-                        console.log(i+"--"+thisList[i].title);
-                        // name: 'taskId'
-                        // name:'userId'
-                        // name: 'nickName',
-                        //     name: 'title',
-                        //     name: 'jobSeTitle',
-                        //     name: 'jobAmount',
-                        //     name: 'jobUrl',
-                        //     name: 'verifyCode',
-                        //     label: '有效日期',
-                        //     name: 'createTime',
-                        tsun.push(thisList[i].taskId);
+                        console.log(i+"--"+thisList[i].bankId);
+                        tsun.push(thisList[i].bankId);
                         tsun.push(thisList[i].userId);
                         tsun.push(thisList[i].nickName);
-                        tsun.push(thisList[i].title);
-                        tsun.push(thisList[i].jobSeTitle);
-                        tsun.push(thisList[i].jobAmount);
-                        tsun.push(thisList[i].jobUrl);
-                        tsun.push(thisList[i].verifyCode==2?'已下架':'经行中');
-                        tsun.push(thisList[i].startTime+"/"+thisList[i].endTime);
+                        tsun.push(thisList[i].sysCoin);
+                        tsun.push(thisList[i].nowMoney);
+                        tsun.push(thisList[i].earnMoney);
+                        tsun.push(thisList[i].czMoney);
                         tsun.push(thisList[i].createTime);
-                        var oper = [{label:'停用',id:thisList[i].taskId,onclick:function(){
-                                $.ajax({
-                                    url: "./ant/manage/user/status",
-                                    dataType: 'json',
-                                    method: 'GET',
-                                    data : {
-                                        userId : this.id,
-                                        status : 2
-                                    },
-                                    success: function(data) {
-                                        alert(data.message);
-                                    },
-                                    error: function(xhr) {
-                                        // 导致出错的原因较多，以后再研究
-                                        alert("服务异常！！");
-                                    }
-                                });
+                        var oper = [{label:'查看',id:thisList[i].userId,onclick:function(){
+
                                 //alert('停用'+this.id);
-                            }},{label:'启用',id:thisList[i].userId,onclick: function(){
-                                $.ajax({
-                                    url: "./ant/manage/user/status",
-                                    dataType: 'json',
-                                    method: 'GET',
-                                    data : {
-                                        userId : this.id,
-                                        status : 1
-                                    },
-                                    success: function(data) {
-                                        alert(data.message);
-                                    },
-                                    error: function(xhr) {
-                                        // 导致出错的原因较多，以后再研究
-                                        alert("服务异常！！");
-                                    }
-                                });
-                                //alert('启用'+tsun[0]);
+                            }},{label:'查看',id:thisList[i].userId,onclick: function(){
+
                             }}];
                         tsun.push(oper);
                         tbody.push(tsun);
@@ -310,7 +260,7 @@
                     //分页工具
                     $('.pagination').pagination(allNum,{
                         callback: function(page){
-                            getSTaskList(page+1);
+                            getUbankList(page+1);
                             //page为当前页数
                         },
                         display_msg: false

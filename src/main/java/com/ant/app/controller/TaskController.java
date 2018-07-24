@@ -1,9 +1,11 @@
 package com.ant.app.controller;
 
+import com.ant.app.entity.req.ReqList;
 import com.ant.app.entity.req.TaskList;
 import com.ant.app.entity.resp.WebResult;
 import com.ant.app.model.SysTask;
 import com.ant.app.service.TaskServiceImpl;
+import com.ant.app.systable.SysTable;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
@@ -33,10 +35,11 @@ public class TaskController {
     @ApiOperation(value = "任务列表", notes = "任务列表",response=String.class)
     @ApiResponses({@ApiResponse(code = 201, message = "申请成功时返回成功信息")})
     @RequestMapping(value = "/list",method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
-    public WebResult getlist(TaskList taskList){
+    public WebResult getlist(ReqList reqList){
         WebResult<List<SysTask>> result = new WebResult();
-        log.info("任务列表请求参数--------》"+taskList);
-        taskService.getTaskList(taskList,result);
+        log.info("任务列表请求参数--------》"+reqList);
+        reqList.setTable(SysTable.SYS_TASK,SysTable.TASK_ID,SysTable.TASK_ID,SysTable.SYS_USER_NAME);
+        taskService.getTaskList(reqList,result);
         log.info("--------》"+result);
         return result;
     }

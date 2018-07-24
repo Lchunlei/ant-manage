@@ -1,11 +1,13 @@
 package com.ant.app.service;
 
 import com.ant.app.Constants;
+import com.ant.app.entity.req.ReqList;
 import com.ant.app.entity.req.TaskList;
 import com.ant.app.entity.resp.WebResult;
 import com.ant.app.mapper.TaskMapper;
 import com.ant.app.model.SysTask;
 import com.ant.app.util.CheckReqUtil;
+import com.ant.app.util.TimeUtil;
 import com.mysql.jdbc.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -22,27 +24,14 @@ public class TaskServiceImpl {
     @Autowired
     TaskMapper taskMapper;
 
-    public void getTaskList(TaskList taskList, WebResult<List<SysTask>> result){
-        if(taskList.getPageNum()==null||taskList.getPageNum()==0){
-            taskList.setPageNum(1);
-            taskList.setPageSize(10);
-        }
-        int startNum = (taskList.getPageNum()-1)*taskList.getPageSize();
-        taskList.setStartNum(startNum);
-        if(!StringUtils.isNullOrEmpty(taskList.getNameOrId())){
-            if(CheckReqUtil.isNumber(taskList.getNameOrId())){
-                taskList.setTaskId(taskList.getNameOrId());
-            }else{
-                taskList.setTitle(taskList.getNameOrId());
-            }
-        }
-        List<SysTask> tasks = taskMapper.selectBypage(taskList);
-        if(tasks.size()==0){
+    public void getTaskList(ReqList reqList, WebResult<List<SysTask>> result){
+        List<SysTask> userBanks = taskMapper.selectBypage(reqList);
+        if(userBanks.size()==0){
             result.setCode(Constants.ERROR_CODE);
             result.setMessage(Constants.NOT_MORE_INFO);
-        }else {
-            result.setWebData(tasks);
-            result.setTotal(taskMapper.selecttotallNum(taskList));
+        }else{
+            result.setWebData(userBanks);
+            result.setTotal(taskMapper.selecttotallNum(reqList));
         }
     }
 
