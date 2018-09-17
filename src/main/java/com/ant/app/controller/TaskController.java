@@ -38,7 +38,7 @@ public class TaskController {
     public WebResult getlist(ReqList reqList){
         WebResult<List<SysTask>> result = new WebResult();
         log.info("任务列表请求参数--------》"+reqList);
-        reqList.setTable(SysTable.SYS_TASK,SysTable.TASK_ID,SysTable.TASK_ID,SysTable.SYS_USER_NAME);
+        reqList.setTable(SysTable.SYS_TASK,SysTable.TASK_ID,SysTable.TASK_ID,SysTable.SYS_USER_NAME,SysTable.TASK_ID);
         taskService.getTaskList(reqList,result);
         log.info("--------》"+result);
         return result;

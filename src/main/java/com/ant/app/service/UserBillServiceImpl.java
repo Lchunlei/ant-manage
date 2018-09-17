@@ -23,7 +23,7 @@ public class UserBillServiceImpl {
 
     //查看用户积分，充值，体现记录
     public void getBillList(ReqList reqList, WebResult<List<UserBill>> result){
-        reqList.setTable("user_bill","billid","userId",null);
+        reqList.setTable("user_bill","billid","userId",null,"billid");
         List<UserBill> userBills = userBillMapper.selectBypage(reqList);
         if(userBills.size()==0){
             result.setCode(Constants.ERROR_CODE);

@@ -4,6 +4,7 @@ import com.ant.app.Constants;
 import com.ant.app.entity.req.ReqList;
 import com.ant.app.entity.resp.WebResult;
 import com.ant.app.mapper.UserIncomeMapper;
+import com.ant.app.model.NowIncome;
 import com.ant.app.model.UserBank;
 import com.ant.app.model.UserInfo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,6 +33,16 @@ public class UserIncomeServiceImpl {
         }
     }
 
+    public void getNowList(ReqList reqList, WebResult result){
+        List<NowIncome> userBanks = userIncomeMapper.selectBypageNow(reqList);
+        if(userBanks.size()==0){
+            result.setCode(Constants.ERROR_CODE);
+            result.setMessage(Constants.NOT_MORE_INFO);
+        }else{
+            result.setWebData(userBanks);
+            result.setTotal(userIncomeMapper.selecttotallNumNow(reqList));
+        }
+    }
 
 
 

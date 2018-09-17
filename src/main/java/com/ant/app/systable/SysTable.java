@@ -16,5 +16,11 @@ public class SysTable {
     public static final String SYS_TASK = "sys_task";
     public static final String TASK_ID = "taskId";
 
+    public static final String NOW_INCOME = "now_income";
+    public static final String NOW_INCOME_KEY = "accId";
+    public static final String NOW_IN = "nowIn";
+
+    public static final String DRAW_ORDER = "draw_order";
+    public static final String DRAW_ID = "drawId";
 
 }

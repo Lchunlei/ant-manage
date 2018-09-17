@@ -21,7 +21,7 @@ public class ReqList {
     private String tableKey;//表的主键
     private String columnId;//id对应列名
     private String columnName;//name对应列名
-
+    private String columnSort;//排序字段
 
     private String stime;
     private Integer reqId;
@@ -43,8 +43,8 @@ public class ReqList {
                 ", reqName='" + reqName + '\'' +
                 '}';
     }
-
-    public void setTable(String tname, String tkey, String cid, String cname){
+    //表名，主键，过滤其他ID列名，过滤字符串列名，排序字段
+    public void setTable(String tname, String tkey, String cid, String cname,String csort){
         if(this.pageNum==null||this.pageNum==0){
             this.setPageNum(1);
         }
@@ -64,6 +64,15 @@ public class ReqList {
         this.setTableKey(tkey);
         this.setColumnName(cname);
         this.setColumnId(cid);
+        this.setColumnSort(csort);
+    }
+
+    public String getColumnSort() {
+        return columnSort;
+    }
+
+    public void setColumnSort(String columnSort) {
+        this.columnSort = columnSort;
     }
 
     public Integer getStartNum() {

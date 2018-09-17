@@ -46,7 +46,7 @@ public class UserController {
     public WebResult regApp(ReqList reqList){
         WebResult<List<UserInfo>> appResult = new WebResult();
         log.info("用户列表请求参数--------》"+reqList);
-        reqList.setTable(SysTable.SYS_USER,SysTable.SYS_USER_KEY,SysTable.SYS_USER_KEY,SysTable.SYS_USER_NAME);
+        reqList.setTable(SysTable.SYS_USER,SysTable.SYS_USER_KEY,SysTable.SYS_USER_KEY,SysTable.SYS_USER_NAME,SysTable.SYS_USER_KEY);
         log.info("用户列表请求参数--------》"+reqList);
         userService.getUserList(reqList,appResult);
         log.info("--------》"+appResult.getWebData());

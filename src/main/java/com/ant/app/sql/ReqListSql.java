@@ -24,7 +24,7 @@ public class ReqListSql {
                     WHERE(reqList.getColumnName()+" LIKE CONCAT('%', #{reqName},'%')");
                 }
             }
-        }.toString()+ " ORDER BY "+reqList.getTableKey()+" DESC"+" limit" + " #{startNum},#{pageSize}";
+        }.toString()+ " ORDER BY "+reqList.getColumnSort()+" DESC"+" limit" + " #{startNum},#{pageSize}";
     }
 
     public String reqListTotal(ReqList reqList){
