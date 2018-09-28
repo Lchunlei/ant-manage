@@ -1,6 +1,8 @@
 package com.ant.app.service;
 
 import com.ant.app.Constants;
+import com.ant.app.entity.req.LayUiAuToReq;
+import com.ant.app.entity.req.LayuiPageReq;
 import com.ant.app.entity.req.ReqList;
 import com.ant.app.entity.req.TaskList;
 import com.ant.app.entity.resp.WebResult;
@@ -24,14 +26,15 @@ public class TaskServiceImpl {
     @Autowired
     TaskMapper taskMapper;
 
-    public void getTaskList(ReqList reqList, WebResult<List<SysTask>> result){
-        List<SysTask> userBanks = taskMapper.selectBypage(reqList);
+    public void getTaskList(LayUiAuToReq reqList, WebResult<List<SysTask>> result){
+        reqList.setStartNum((reqList.getPage()-1)*10);
+        List<SysTask> userBanks = taskMapper.selectByPage(reqList);
         if(userBanks.size()==0){
             result.setCode(Constants.ERROR_CODE);
             result.setMessage(Constants.NOT_MORE_INFO);
         }else{
             result.setWebData(userBanks);
-            result.setTotal(taskMapper.selecttotallNum(reqList));
+            result.setTotal(taskMapper.selectTotallNum(reqList));
         }
     }
 
@@ -46,7 +49,6 @@ public class TaskServiceImpl {
     public void addTask(SysTask sysTask,WebResult result){
         //计算出最大有赏阅读次数
         int i = sysTask.getJobAmount()/2;
-        sysTask.setMaxRead(i);
         sysTask.setType(0);
         int j = taskMapper.insertTask(sysTask);
         if(j<1){

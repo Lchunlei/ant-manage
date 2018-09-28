@@ -1,5 +1,7 @@
 package com.ant.app.model;
 
+import com.ant.app.util.MoneyUtil;
+
 import java.util.Date;
 
 /**
@@ -13,7 +15,7 @@ public class DrawOrder {
     private String nickName;
     private String tradeNoTo;//提现订单号
     private Integer getType;//1微信2支付宝
-    private Integer drawStatus;//1返现成功2失败
+    private Integer drawStatus;//1返现成功2失败0处理中
     private String aliAcc;//支付宝标识
     private String openId;//微信标识
     private Integer amount;//'金额分'
@@ -101,6 +103,7 @@ public class DrawOrder {
     }
 
     public void setAmount(Integer amount) {
+        this.amountYuan= MoneyUtil.FenTurnYuan(amount.toString());
         this.amount = amount;
     }
 

@@ -1,6 +1,7 @@
 package com.ant.app.service;
 
 import com.ant.app.Constants;
+import com.ant.app.entity.req.LayuiPageReq;
 import com.ant.app.entity.req.ReqList;
 import com.ant.app.entity.req.UserList;
 import com.ant.app.entity.resp.WebResult;
@@ -38,13 +39,35 @@ public class UserServiceImpl {
 
     }
 
-    public void updaUserStatus(Integer status,Integer userID,WebResult result){
-        int i = userMapper.updateUserStatus(status,userID);
-        if(i!=1){
+    public void getUserList(LayuiPageReq reqList, WebResult<List<UserInfo>> result){
+        reqList.setStartNum((reqList.getPageNum()-1)*10);
+        List<UserInfo> userInfos = userMapper.selectByPage(reqList);
+        if(userInfos.size()==0){
             result.setCode(Constants.ERROR_CODE);
-            result.setMessage(Constants.FILE_MSG);
+            result.setMessage(Constants.NOT_MORE_INFO);
+        }else{
+            result.setWebData(userInfos);
+            result.setTotal(userMapper.selectTotallNum(reqList));
         }
 
+    }
+
+    public void updaUserStatus(Integer userID,WebResult result){
+        UserInfo userInfo = userMapper.selectByiD(userID);
+        if(userInfo==null){
+            result.setCode(Constants.ERROR_CODE);
+            result.setMessage(Constants.DATA_NULL);
+        }else {
+            int status=0;
+            if(userInfo.getStatus().equals(0)){
+                status=1;
+            }
+            int i = userMapper.updateUserStatus(status,userID);
+            if(i!=1){
+                result.setCode(Constants.ERROR_CODE);
+                result.setMessage(Constants.FILE_MSG);
+            }
+        }
     }
 
 

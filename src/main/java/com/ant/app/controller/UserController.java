@@ -28,7 +28,7 @@ import java.util.List;
 
 @Api(value = "用户信息",description = "用户信息")
 @RestController
-@RequestMapping("/page/ant/manage")
+@RequestMapping("/ant/manage")
 public class UserController {
     private static final Logger log = LoggerFactory.getLogger(UserController.class);
     @Autowired
@@ -43,12 +43,11 @@ public class UserController {
     @ApiOperation(value = "用户列表", notes = "用户列表",response=String.class)
     @ApiResponses({@ApiResponse(code = 201, message = "申请成功时返回成功信息")})
     @RequestMapping(value = "/user/list",method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
-    public WebResult regApp(ReqList reqList){
+    public WebResult regApp(LayuiPageReq layuiPageReq){
         WebResult<List<UserInfo>> appResult = new WebResult();
-        log.info("用户列表请求参数--------》"+reqList);
-        reqList.setTable(SysTable.SYS_USER,SysTable.SYS_USER_KEY,SysTable.SYS_USER_KEY,SysTable.SYS_USER_NAME,SysTable.SYS_USER_KEY);
-        log.info("用户列表请求参数--------》"+reqList);
-        userService.getUserList(reqList,appResult);
+        layuiPageReq.tableSet(SysTable.SYS_USER,SysTable.SYS_USER_KEY,SysTable.CREAT_TIME,SysTable.SYS_USER_NAME,SysTable.SYS_USER_KEY);
+        log.info("用户列表请求参数--------》"+layuiPageReq);
+        userService.getUserList(layuiPageReq,appResult);
         log.info("--------》"+appResult.getWebData());
         return appResult;
     }
@@ -57,10 +56,10 @@ public class UserController {
     @ApiOperation(value = "启用禁用用户", notes = "启用禁用用户",response=String.class)
     @ApiResponses({@ApiResponse(code = 201, message = "申请成功时返回成功信息")})
     @RequestMapping(value = "/user/status",method = RequestMethod.GET, produces = "application/json;charset=UTF-8")
-    public WebResult regApp(Integer userId,Integer status){
+    public WebResult regApp(Integer userId){
         WebResult result = new WebResult();
-        log.info("启用禁用用户请求参数--------》"+userId+"status--->"+status);
-        userService.updaUserStatus(status,userId,result);
+        log.info("启用禁用用户请求参数--------》"+userId);
+        userService.updaUserStatus(userId,result);
         log.info("--------》"+result);
         return result;
     }

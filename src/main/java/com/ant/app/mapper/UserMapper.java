@@ -1,7 +1,9 @@
 package com.ant.app.mapper;
 
+import com.ant.app.entity.req.LayuiPageReq;
 import com.ant.app.entity.req.ReqList;
 import com.ant.app.model.UserInfo;
+import com.ant.app.sql.LayuiPageSql;
 import com.ant.app.sql.ReqListSql;
 import com.ant.app.sql.UserSql;
 import org.apache.ibatis.annotations.*;
@@ -25,9 +27,15 @@ public interface UserMapper {
     @SelectProvider(type=ReqListSql.class, method="reqListTotal")
     int selecttotallNum(ReqList reqList);
 
+    @SelectProvider(type=LayuiPageSql.class, method="reqList")
+    List<UserInfo> selectByPage(LayuiPageReq reqList);
+    @SelectProvider(type=LayuiPageSql.class, method="reqListTotal")
+    int selectTotallNum(LayuiPageReq reqList);
+
     @Update("UPDATE sys_user SET status=${status} WHERE userId=${userId}")
     int updateUserStatus(@Param("status")Integer status,@Param("userId")Integer userId);
 
-
+    @Select("SELECT * FROM sys_user WHERE userId=${userId}")
+    UserInfo selectByiD(@Param("userId")Integer userId);
 
 }

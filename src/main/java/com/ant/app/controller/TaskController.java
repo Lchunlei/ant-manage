@@ -1,7 +1,10 @@
 package com.ant.app.controller;
 
+import com.ant.app.entity.req.LayUiAuToReq;
 import com.ant.app.entity.req.ReqList;
 import com.ant.app.entity.req.TaskList;
+import com.ant.app.entity.resp.LayUIItem;
+import com.ant.app.entity.resp.LayUiResult;
 import com.ant.app.entity.resp.WebResult;
 import com.ant.app.model.SysTask;
 import com.ant.app.service.TaskServiceImpl;
@@ -26,7 +29,7 @@ import java.util.List;
  */
 @Api(value = "系统任务",description = "系统任务")
 @RestController
-@RequestMapping("/page/ant/task")
+@RequestMapping("/ant/task")
 public class TaskController {
     private static final Logger log = LoggerFactory.getLogger(TaskController.class);
     @Autowired
@@ -35,13 +38,19 @@ public class TaskController {
     @ApiOperation(value = "任务列表", notes = "任务列表",response=String.class)
     @ApiResponses({@ApiResponse(code = 201, message = "申请成功时返回成功信息")})
     @RequestMapping(value = "/list",method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
-    public WebResult getlist(ReqList reqList){
+    public LayUiResult getlist(LayUiAuToReq layUiAuToReq){
         WebResult<List<SysTask>> result = new WebResult();
-        log.info("任务列表请求参数--------》"+reqList);
-        reqList.setTable(SysTable.SYS_TASK,SysTable.TASK_ID,SysTable.TASK_ID,SysTable.SYS_USER_NAME,SysTable.TASK_ID);
-        taskService.getTaskList(reqList,result);
+        log.info("任务列表请求参数--------》"+layUiAuToReq);
+        layUiAuToReq.tableSet(SysTable.SYS_TASK,SysTable.TASK_ID,SysTable.CREAT_TIME,SysTable.TASK_TITAL,SysTable.TASK_ID);
+        taskService.getTaskList(layUiAuToReq,result);
+
+        LayUiResult<SysTask> layUiResult = new LayUiResult();
+        layUiResult.setCode(0);
+        layUiResult.setMsg("成功");
+        layUiResult.setCount(result.getTotal());
+        layUiResult.setData(result.getWebData());
         log.info("--------》"+result);
-        return result;
+        return layUiResult;
     }
 
     @ApiOperation(value = "任务状态修改", notes = "任务状态修改",response=String.class)

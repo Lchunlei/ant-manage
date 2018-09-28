@@ -1,7 +1,9 @@
 package com.ant.app.mapper;
 
+import com.ant.app.entity.req.LayUiAuToReq;
 import com.ant.app.entity.req.ReqList;
 import com.ant.app.model.SysTask;
+import com.ant.app.sql.LayuiAutoPageSql;
 import com.ant.app.sql.ReqListSql;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Param;
@@ -21,6 +23,12 @@ public interface TaskMapper {
     List<SysTask> selectBypage(ReqList reqList);
     @SelectProvider(type=ReqListSql.class, method="reqListTotal")
     int selecttotallNum(ReqList reqList);
+
+
+    @SelectProvider(type=LayuiAutoPageSql.class, method="reqList")
+    List<SysTask> selectByPage(LayUiAuToReq layUiAuToReq);
+    @SelectProvider(type=LayuiAutoPageSql.class, method="reqListTotal")
+    Integer selectTotallNum(LayUiAuToReq layUiAuToReq);
 
     @Update("UPDATE sys_task SET verifyCode=${verifyCode} WHERE taskId=${taskId}")
     int updateTaskStatus(@Param("verifyCode")Integer verifyCode, @Param("taskId")Integer taskId);

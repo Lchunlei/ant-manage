@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>用户列表</title>
+		<meta name="renderer" content="webkit">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+		<link rel="stylesheet" href="../../static/css/font.css">
+		<link rel="stylesheet" href="../../static/css/weadmin.css">
+		<!-- 让IE8/9支持媒体查询，从而兼容栅格 -->
+		<!--[if lt IE 9]>
+	      <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
+	      <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
+	    <![endif]-->
+	</head>
+
+	<body>
+		<div class="weadmin-nav">
+			<span class="layui-breadcrumb">
+        <a href="">首页</a>
+        <a href="">用户管理</a>
+        <a>
+          <cite>用户列表</cite></a>
+      </span>
+			<a class="layui-btn layui-btn-sm" style="line-height:1.6em;margin-top:3px;float:right" href="javascript:void(0);" title="刷新">
+				<i class="layui-icon" style="line-height:30px">&#x1002;</i></a>
+		</div>
+
+		<div class="weadmin-body">
+			<div class="layui-row">
+				<form id="searchTab" class="layui-form layui-col-md12 we-search">
+					用户搜索：
+					<div class="layui-inline">
+						<input class="layui-input" placeholder="开始日" name="sDate" id="start">
+					</div>
+					<div class="layui-inline">
+						<input class="layui-input" placeholder="截止日" name="eDate" id="end">
+					</div>
+					<div class="layui-inline">
+						<input type="text" name="searchValue" placeholder="请输入用户名" autocomplete="off" class="layui-input">
+					</div>
+					<div class="layui-inline">
+						<a onclick="getSerchList()" class="layui-btn"><i class="layui-icon">&#xe615;</i></a>
+					</div>
+				</form>
+			</div>
+			<div class="weadmin-block">
+				<button class="layui-btn layui-btn-danger" onclick="delAll()"><i class="layui-icon"></i>批量删除</button>
+				<button class="layui-btn" onclick="WeAdminShow('添加用户','./add.html',600,400)"><i class="layui-icon"></i>添加</button>
+				<span class="fr" style="line-height:40px" id="totalNum"></span>
+			</div>
+
+			<table class="layui-table" id="memberList">
+				<thead>
+					<tr>
+						<th>
+							<div class="layui-unselect header layui-form-checkbox" lay-skin="primary"><i class="layui-icon">&#xe605;</i></div>
+						</th>
+						<th>ID</th>
+						<th>用户名</th>
+						<th>性别</th>
+						<th>手机号</th>
+						<th>真实姓名</th>
+						<th>设备</th>
+						<th>加入时间</th>
+						<th>状态</th>
+						<th>操作</th>
+					</tr>
+				</thead>
+				<tbody id="users">
+					<!--
+					<tr data-id="1">
+						<td>
+							<div class="layui-unselect layui-form-checkbox" lay-skin="primary" data-id="1"><i class="layui-icon">&#xe605;</i></div>
+						</td>
+						<td>1</td>
+						<td>小张</td>
+						<td>男</td>
+						<td>17600000000</td>
+						<td>admin@mail.com</td>
+						<td>北京市 海淀区</td>
+						<td>2017-01-01 11:11:42</td>
+						<td class="td-status">
+							<span class="layui-btn layui-btn-normal layui-btn-xs">已启用</span></td>
+						<td class="td-manage">
+							<a onclick="member_stop(this,'10001')" href="javascript:;" title="启用">
+								<i class="layui-icon">&#xe601;</i>
+							</a>
+							<a title="编辑" onclick="WeAdminEdit('编辑','./edit.html', 1, 600, 400)" href="javascript:;">
+								<i class="layui-icon">&#xe642;</i>
+							</a>
+							<a onclick="WeAdminShow('修改密码','./password.html',600,400)" title="修改密码" href="javascript:;">
+								<i class="layui-icon">&#xe631;</i>
+							</a>
+							<a title="删除" onclick="member_del(this,'要删除的id')" href="javascript:;">
+								<i class="layui-icon">&#xe640;</i>
+							</a>
+						</td>
+					</tr>
+					-->
+				</tbody>
+			</table>
+
+			<!--
+			<div class="page">
+				<div>
+					<a class="prev" href="">&lt;&lt;</a>
+					<a class="num" href="">1</a>
+					<span class="current">2</span>
+					<a class="num" href="">3</a>
+					<a class="num" href="">489</a>
+					<a class="next" href="">&gt;&gt;</a>
+				</div>
+			</div>
+			-->
+			<div class="page" id="listPage"></div>
+
+		</div>
+		<script type="text/javascript" src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+		<script src="../../lib/layui/layui.js" charset="utf-8"></script>
+		<script type="text/javascript" charset="utf-8">
+
+            //首次打开页面加载
+            getSerchList();
+            //初次加载或者条件搜索
+			function getSerchList() {
+                var nowform = new FormData(document.getElementById("searchTab"));
+                nowform.append("pageSize", 10);
+                nowform.append("pageNum", 1);
+                $.ajax({
+                    url:"../../ant/manage/user/list"
+                    ,type:"post"
+                    ,data:nowform
+                    ,processData:false
+                    ,contentType:false
+                    ,success:function(data){
+                        if('R000'==data.code){
+                            $("#totalNum").text("共有数据："+data.total+" 条");
+                            fenye(data.total);
+                            //先清空表再补充
+                            tableFill(data.webData);
+						}else {
+                            layer.msg(data.message, {
+                                icon: 5,
+                                time: 1000
+                            });
+						}
+                    }
+                    ,error:function(e){
+                        layer.msg('系统异常!', {
+                            icon: 5,
+                            time: 1000
+                        });
+                    }
+                });
+            }
+
+            //分页加载
+            function getPageList(pageNum) {
+                var nowform = new FormData(document.getElementById("searchTab"));
+                nowform.append("pageSize", 10);
+                nowform.append("pageNum", pageNum);
+                $.ajax({
+                    url:"../../ant/manage/user/list"
+                    ,type:"post"
+                    ,data:nowform
+                    ,processData:false
+                    ,contentType:false
+                    ,success:function(data){
+                        //更新表数据
+						if("R000"==data.code){
+                            tableFill(data.webData);
+						}else {
+                            layer.msg(data.message, {
+                                icon: 5,
+                                time: 1000
+                            });
+						}
+                    }
+                    ,error:function(e){
+                        layer.msg('系统异常!', {
+                            icon: 5,
+                            time: 1000
+                        });
+                    }
+                });
+            }
+
+			function fenye(total) {
+                //执行一个laypage实例
+                layui.use('laypage', function(){
+                    var laypage = layui.laypage;
+                    laypage.render({
+                        elem: 'listPage' //注意，这里的 test1 是 ID，不用加 # 号
+                        ,count: total //数据总数，从服务端得到
+                        ,jump: function(obj, first){
+                            //obj包含了当前分页的所有参数，比如：
+                            console.log(obj.curr); //得到当前页，以便向服务端请求对应页的数据。
+                            console.log(obj.limit); //得到每页显示的条数
+                            //首次不执行
+                            if(!first){
+                                getPageList(obj.curr);
+                            }
+                        }
+                    });
+                });
+            }
+
+			//填补表数据
+			function tableFill(tabData) {
+                //遍历json数组时，这么写p为索引，0,1
+                $("#users").empty();
+                for(var p in tabData){
+                    $("#users").append("<tr data-id='"+tabData[p].userId+"'>" +
+                        "<td>" +
+                        "<div class='layui-unselect layui-form-checkbox' lay-skin='primary' data-id='"+tabData[p].userId+"'><i class='layui-icon'>&#xe605;</i></div>" +
+                        "</td>" +
+                        "<td>"+tabData[p].userId+"</td>" +
+                        "<td>"+tabData[p].nickName+"</td>" +
+                        "<td>不详</td>" +
+                        "<td>13000000000</td>" +
+                        "<td>不详</td>" +
+                        "<td>"+tabData[p].plantForm+"</td>" +
+                        "<td>"+tabData[p].createTime+"</td>" +
+                        "<td class='td-status'>" +checkStatu(tabData[p].status,tabData[p].userId)+
+                        "&nbsp;<a title='编辑' onclick='javascript:void(0);' href='javascript:;'>" +
+                        "<i class='layui-icon'>&#xe642;</i>" +
+                        "</a>" +
+                        "&nbsp;<a onclick='javascript:void(0);' title='修改密码' href=\"javascript:;\">" +
+                        "<i class=\"layui-icon\">&#xe631;</i>" +
+                        "</a>" +
+                        "&nbsp;<a title='删除' onclick='javascript:void(0);'  href=\"javascript:;\">" +
+                        "<i class='layui-icon'>&#xe640;</i>" +
+                        "</a>" +
+                        "</td>" +
+                        "</tr>");
+                }
+            }
+			//判断是否启用
+			function checkStatu(statu,userid) {
+				if("0"==statu){
+				    return  "<span class='layui-btn layui-btn-normal layui-btn-xs'>已启用</span></td><td class=\"td-manage\"><a onclick=\"member_stop(this,'"+userid+"')\" href=\"javascript:;\" title=\"启用\"><i class=\"layui-icon\">&#xe601;</i></a>";
+				}else {
+                    return  "<span class='layui-btn layui-btn-normal layui-btn-xs layui-btn-disabled'>已停用</span></td><td class=\"td-manage\"><a onclick=\"member_stop(this,'"+userid+"')\" href=\"javascript:;\" title=\"停用\"><i class=\"layui-icon\">&#xe62f;</i></a>";
+				}
+            }
+
+
+		</script>
+		<script src="../../static/js/eleDel.js" type="text/javascript" charset="utf-8"></script>
+	</body>
+
+</html>
