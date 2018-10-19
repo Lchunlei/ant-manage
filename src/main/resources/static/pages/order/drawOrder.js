@@ -22,55 +22,35 @@ layui.use(['table', 'jquery','form', 'admin'], function() {
 		form = layui.form,
 		admin = layui.admin;
 	table.render({
-		elem: '#articleList',
-        url:'../../ant/task/list',
+		elem: '#drawOrders',
+        url:'../../ant/draw/list',
         method:'post',
 		cellMinWidth: 80,
 		cols: [
 			[{
 				type: 'checkbox'
 			}, {
-				field: 'taskId',width: 60,title: 'ID'
-			}, {
-				field: 'title',width: 90,title: '一级标题'
-			}, {
-                field: 'jobUrl',width: 90,title: '链接地址'
+				field: 'drawId',width: 60,title: 'ID'
+			},{
+                field: 'nickName',width: 100,title: '昵称'
             }, {
-				field: 'jobAmount',width: 90,title: '充值金额'
+				field: 'tradeNoTo',title: '单号'
             }, {
-				field: 'balance',width: 90,title: '余额'
-            }, {
-				field: 'serviceCharge',width: 90,title: '手续费'
-            }, {
-				field: 'readVol',width: 90,title: '阅读总量'
-            }, {
-				field: 'moneyRead',width: 90,title: '有赏量'
+				field: 'getType',title: '提现渠道',templet: '#getTypeTep'
+            },{
+                field: 'aliAcc',title: '支付宝账号'
             },  {
-                field: 'getVol',width: 90,title: '领取数'
-            },  {
-                field: 'seTime',width: 200,title: '有效期'
+				field: 'drawStatus',title: '状态',templet: '#drawStatusTep'
+            }, {
+				field: 'amountYuan',title: '金额'
+            }, {
+                field: 'tradeDes',title: '备注'
+            }, {
+                field: 'cTime',width: 200,title: '创建时间'
             }, {
 				field: 'operate',title: '操作',toolbar: '#operateTpl',unresize: true
 			}]
 		],
-        //data:tabData,
-		// data: [{
-		// 	"id": "1",
-		// 	"title": "WeAdmin的第一个版本在不断地抽空完善学习中",
-		// 	"date": "2018-02-03",
-		// 	"category": "官方动态",
-		// 	"sort": "1",
-		// 	"recommend": "checked",
-		// 	"top": "checked"
-		// }, {
-		// 	"id": "2",
-		// 	"title": "WeAdmin的测试数据一二三四五六七",
-		// 	"date": "2018-02-03",
-		// 	"category": "新闻资讯",
-		// 	"sort": "1",
-		// 	"recommend": "",
-		// 	"top": "checked"
-		// }],
 		event: true,
 		page: true
 	});
@@ -82,7 +62,7 @@ layui.use(['table', 'jquery','form', 'admin'], function() {
 	var active = {
 
 		getCheckData: function() { //获取选中数据
-			var checkStatus = table.checkStatus('articleList'),
+			var checkStatus = table.checkStatus('drawOrder'),
 				data = checkStatus.data;
 			//console.log(data);
 			//layer.alert(JSON.stringify(data));
@@ -101,7 +81,7 @@ layui.use(['table', 'jquery','form', 'admin'], function() {
 		},
 
 		Recommend: function() {
-			var checkStatus = table.checkStatus('articleList'),
+			var checkStatus = table.checkStatus('drawOrder'),
 				data = checkStatus.data;
 			if(data.length > 0) {
 				layer.msg("您点击了推荐操作");
@@ -162,7 +142,7 @@ function ReTable(){
     var sDateV = $("#start").val();
     var eDateV = $("#end").val();
     var searchV = $("#search").val();
-    table.reload('articleList', {
+    table.reload('drawOrder', {
         where: {searchValue:searchV, sDate:sDateV,eDate:eDateV},
         page: {
             curr: 1 //重新从第 1 页开始

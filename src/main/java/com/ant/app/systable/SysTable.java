@@ -10,7 +10,7 @@ public class SysTable {
     public static final String SYS_USER_KEY = "userId";
     public static final String SYS_USER_NAME = "nickName";
     public static final String CREAT_TIME = "createTime";
-
+    public static final String C_TIME = "cTime";
 
     public static final String USER_BANK = "user_bank";
     public static final String BANK_ID = "bankId";
@@ -25,5 +25,8 @@ public class SysTable {
 
     public static final String DRAW_ORDER = "draw_order";
     public static final String DRAW_ID = "drawId";
+
+    public static final String SYS_ORDER = "sys_order";
+    public static final String ORDER_ID = "orderId";
 
 }

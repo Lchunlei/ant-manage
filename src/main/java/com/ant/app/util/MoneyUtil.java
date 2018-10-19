@@ -1,20 +1,27 @@
 package com.ant.app.util;
 
+import java.util.regex.Pattern;
+
 /**
- * Created by sfb_liuchunlei on 2017/11/29 0029.
+ * Created by sfb_liuchunlei on 2018/10/19 0029.
  */
 public class MoneyUtil {
     //将字符串分，转为单位是元的字符串
     public static String FenTurnYuan(String fenNum){
+        Pattern pattern = Pattern.compile("^[-\\+]?[\\d]*$");
         String yuanNum;
-        if(fenNum==null){
-            return null;
-        }else if(fenNum.length()==1){
-            yuanNum="0.0"+fenNum;
-        }else if(fenNum.length()==2){
-            yuanNum="0."+fenNum;
+        if(pattern.matcher(fenNum).matches()){
+            if(fenNum==null){
+                return null;
+            }else if(fenNum.length()==1){
+                yuanNum="0.0"+fenNum;
+            }else if(fenNum.length()==2){
+                yuanNum="0."+fenNum;
+            }else {
+                yuanNum=fenNum.substring(0,fenNum.length()-2)+"."+fenNum.substring(fenNum.length()-2,fenNum.length());
+            }
         }else {
-            yuanNum=fenNum.substring(0,fenNum.length()-2)+"."+fenNum.substring(fenNum.length()-2,fenNum.length());
+            yuanNum="0.00";
         }
         return yuanNum;
     }

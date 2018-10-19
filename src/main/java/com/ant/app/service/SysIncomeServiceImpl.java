@@ -22,7 +22,7 @@ public class SysIncomeServiceImpl {
     UserBillMapper userBillMapper;
 
     //查看平台总收入
-    public void lookIncome(WebResult result){
+    public SysIncome lookIncome(){
         SysIncome income = sysIncomeMapper.selectIncome();
         if(income==null){
             //重新统计所有bill，然后记录
@@ -41,12 +41,8 @@ public class SysIncomeServiceImpl {
                 income.setEndId(maxId);
             }
             sysIncomeMapper.insertIncome(income);
-            result.setWebData(income);
-
-        }else {
-            result.setWebData(income);
-
         }
+        return income;
     }
 
     //更新平台收入

@@ -25,8 +25,14 @@ public interface UserBillMapper {
     @Select("SELECT SUM(amount) FROM user_bill WHERE billStatus=0 AND billType=1 AND billid BETWEEN ${starId} AND ${endId}")
     int countIncome(@Param("endId")Integer endId,@Param("starId")Integer starId);
 
+    @Select("SELECT SUM(amount) FROM user_bill WHERE billStatus=0 AND billType=1")
+    Integer countAllIncome();
+
     @Select("SELECT SUM(amount) FROM user_bill WHERE billStatus=0 AND billType=2 AND billid BETWEEN ${starId} AND ${endId}")
     int countOutput(@Param("endId")Integer endId,@Param("starId")Integer starId);
+
+    @Select("SELECT SUM(amount) FROM user_bill WHERE billStatus=0 AND billType=2 AND createTime>#{sTime} AND createTime<#{eTime}")
+    Integer countYetIncome(@Param("sTime")String sTime, @Param("eTime")String eTime);
 
     @Select("SELECT MAX(billid) FROM user_bill")
     Integer getMaxId();

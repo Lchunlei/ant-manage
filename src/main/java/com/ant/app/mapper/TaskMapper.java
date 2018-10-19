@@ -5,10 +5,7 @@ import com.ant.app.entity.req.ReqList;
 import com.ant.app.model.SysTask;
 import com.ant.app.sql.LayuiAutoPageSql;
 import com.ant.app.sql.ReqListSql;
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Param;
-import org.apache.ibatis.annotations.SelectProvider;
-import org.apache.ibatis.annotations.Update;
+import org.apache.ibatis.annotations.*;
 import org.springframework.stereotype.Repository;
 import java.util.List;
 
@@ -35,5 +32,8 @@ public interface TaskMapper {
 
     @Insert("INSERT INTO sys_task(`userId`, `type`,`title`,`jobSeTitle`,`jobUrl`,`maxRead`,`startTime`,`endTime`,`createTime`) VALUES (${userId},${type},#{title},#{jobSeTitle},#{jobUrl},${maxRead},#{startTime},#{endTime},NOW())")
     Integer insertTask(SysTask sysTask);
+
+    @Select("SELECT COUNT(*) FROM sys_task WHERE createTime>#{sTime} AND createTime<#{eTime}")
+    Integer findNewTaskNum(@Param("sTime")String sTime, @Param("eTime")String eTime);
 
 }

@@ -38,4 +38,7 @@ public interface UserMapper {
     @Select("SELECT * FROM sys_user WHERE userId=${userId}")
     UserInfo selectByiD(@Param("userId")Integer userId);
 
+    @Select("SELECT COUNT(*) FROM sys_user WHERE createTime>#{sTime} AND createTime<#{eTime}")
+    Integer selectNewUserNum(@Param("sTime")String sTime, @Param("eTime")String eTime);
+
 }

@@ -26,6 +26,28 @@ public class DrawOrder {
     private Date paymentTime;//'微信方支付完成时间'
     private Date cTime;
 
+    @Override
+    public String toString() {
+        return "DrawOrder{" +
+                "drawId=" + drawId +
+                ", userId=" + userId +
+                ", bankId=" + bankId +
+                ", nickName='" + nickName + '\'' +
+                ", tradeNoTo='" + tradeNoTo + '\'' +
+                ", getType=" + getType +
+                ", drawStatus=" + drawStatus +
+                ", aliAcc='" + aliAcc + '\'' +
+                ", openId='" + openId + '\'' +
+                ", amount=" + amount +
+                ", amountYuan='" + amountYuan + '\'' +
+                ", bankStatus=" + bankStatus +
+                ", tradeDes='" + tradeDes + '\'' +
+                ", createIp='" + createIp + '\'' +
+                ", paymentTime=" + paymentTime +
+                ", cTime=" + cTime +
+                '}';
+    }
+
     public Integer getDrawId() {
         return drawId;
     }

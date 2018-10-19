@@ -27,30 +27,29 @@
 										<ul class="layui-row layui-col-space10 layui-this">
 											<li class="layui-col-xs3">
 												<a href="javascript:void(0);" target="_blank">
-													<i class="layui-icon">17</i>
+													<i class="layui-icon" id="newTask">0</i>
 													<cite>新增热文</cite>
 
 												</a>
 											</li>
 											<li class="layui-col-xs3">
 												<a href="javascript:void(0);" target="_blank">
-													<i class="layui-icon">23</i>
+													<i class="layui-icon" id="newUser">0</i>
 													<cite>新增用户</cite>
 
 												</a>
 											</li>
 											<li class="layui-col-xs3">
 												<a href="javascript:void(0);" target="_blank">
-													<i class="layui-icon">789.26</i>
+													<i class="layui-icon" id="yetIncome">0.00</i>
 													<cite>昨日收入</cite>
 
 												</a>
 											</li>
 											<li class="layui-col-xs3">
 												<a href="javascript:void(0);" target="_blank">
-													<i class="layui-icon">45698.25</i>
+													<i class="layui-icon" id="allIncome">0.00</i>
 													<cite>总收入</cite>
-
 												</a>
 											</li>
 										</ul>
@@ -314,7 +313,7 @@
 									</div>
 									<ul>
 										<li>基于echarts 4.0版本实现中国地图指定省份使用不同颜色标识，指定省份显示气泡图标，
-											<a href="javascript:;">#详见左侧导航-【系统统计】-【地图DIY实例】</li>
+											<a href="javascript:;">#详见左侧导航-【系统统计】-【地图DIY实例】</a></li>
 									</ul>
 								</div>
 							</li>
@@ -356,7 +355,29 @@
 		</div>
 	</body>
 	<script type="text/javascript" src="../lib/layui/layui.js" charset="utf-8"></script>
+	<script type="text/javascript" src="../login/js/jquery-1.8.0.min.js" charset="utf-8"></script>
 	<script type="text/javascript">
+        $.ajax({
+            url:"../../../ant/income/welcome/init"
+            ,type:"GET"
+            ,processData:false
+            ,contentType:false
+            ,success:function(data_resp){
+                console.log("欢迎页面初始化");
+                if('R000'==data_resp.code){
+                    $("#newTask").text(data_resp.webData.newTaskNum);
+                    $("#newUser").text(data_resp.webData.newUserNum);
+                    $("#yetIncome").text(data_resp.webData.yestIncome);
+                    $("#allIncome").text(data_resp.webData.totalIncome);
+                }else {
+
+                }
+            }
+            ,error:function(e){
+
+            }
+        });
+
 		layui.extend({
 			admin: '{/}../static/js/admin',
 		});
@@ -393,6 +414,9 @@
 			    console.log(str);
 			 };
 		});
+
+
+
 	</script>
 
 </html>

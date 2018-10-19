@@ -1,6 +1,7 @@
 package com.ant.app.service;
 
 import com.ant.app.Constants;
+import com.ant.app.entity.req.LayUiAuToReq;
 import com.ant.app.entity.req.ReqList;
 import com.ant.app.entity.resp.WebResult;
 import com.ant.app.mapper.UserIncomeMapper;
@@ -22,14 +23,15 @@ public class UserIncomeServiceImpl {
     UserIncomeMapper userIncomeMapper;
 
 
-    public void getUbList(ReqList reqList, WebResult result){
-        List<UserBank> userBanks = userIncomeMapper.selectBypageUB(reqList);
+    public void getUbList(LayUiAuToReq layUiAuToReq, WebResult result){
+        layUiAuToReq.setStartNum((layUiAuToReq.getPage()-1)*10);
+        List<UserBank> userBanks = userIncomeMapper.selectByPage(layUiAuToReq);
         if(userBanks.size()==0){
             result.setCode(Constants.ERROR_CODE);
             result.setMessage(Constants.NOT_MORE_INFO);
         }else{
             result.setWebData(userBanks);
-            result.setTotal(userIncomeMapper.selecttotallNumUB(reqList));
+            result.setTotal(userIncomeMapper.selectTotallNum(layUiAuToReq));
         }
     }
 

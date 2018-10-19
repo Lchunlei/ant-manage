@@ -22,55 +22,33 @@ layui.use(['table', 'jquery','form', 'admin'], function() {
 		form = layui.form,
 		admin = layui.admin;
 	table.render({
-		elem: '#articleList',
-        url:'../../ant/task/list',
+		elem: '#sysOrders',
+        url:'../../ant/sys/order/list',
         method:'post',
 		cellMinWidth: 80,
 		cols: [
 			[{
 				type: 'checkbox'
 			}, {
-				field: 'taskId',width: 60,title: 'ID'
+				field: 'orderId',width: 60,title: 'ID'
 			}, {
-				field: 'title',width: 90,title: '一级标题'
+				field: 'nickName',width: 100,title: '用户昵称'
 			}, {
-                field: 'jobUrl',width: 90,title: '链接地址'
+                field: 'tradeNo',title: '订单号'
             }, {
-				field: 'jobAmount',width: 90,title: '充值金额'
+				field: 'totalFeeYuan',width: 60,title: '金额'
             }, {
-				field: 'balance',width: 90,title: '余额'
+				field: 'buyType',width: 60,title: '类型',templet: '#buyTypeTep'
             }, {
-				field: 'serviceCharge',width: 90,title: '手续费'
+				field: 'tradeStatus',width: 100,title: '状态',templet: '#tradeStatusTep'
             }, {
-				field: 'readVol',width: 90,title: '阅读总量'
+				field: 'tradeDes',title: '订单说明'
             }, {
-				field: 'moneyRead',width: 90,title: '有赏量'
-            },  {
-                field: 'getVol',width: 90,title: '领取数'
-            },  {
-                field: 'seTime',width: 200,title: '有效期'
+                field: 'cTime',width: 200,title: '创建时间'
             }, {
 				field: 'operate',title: '操作',toolbar: '#operateTpl',unresize: true
 			}]
 		],
-        //data:tabData,
-		// data: [{
-		// 	"id": "1",
-		// 	"title": "WeAdmin的第一个版本在不断地抽空完善学习中",
-		// 	"date": "2018-02-03",
-		// 	"category": "官方动态",
-		// 	"sort": "1",
-		// 	"recommend": "checked",
-		// 	"top": "checked"
-		// }, {
-		// 	"id": "2",
-		// 	"title": "WeAdmin的测试数据一二三四五六七",
-		// 	"date": "2018-02-03",
-		// 	"category": "新闻资讯",
-		// 	"sort": "1",
-		// 	"recommend": "",
-		// 	"top": "checked"
-		// }],
 		event: true,
 		page: true
 	});
@@ -82,7 +60,7 @@ layui.use(['table', 'jquery','form', 'admin'], function() {
 	var active = {
 
 		getCheckData: function() { //获取选中数据
-			var checkStatus = table.checkStatus('articleList'),
+			var checkStatus = table.checkStatus('sysOrders'),
 				data = checkStatus.data;
 			//console.log(data);
 			//layer.alert(JSON.stringify(data));
@@ -101,7 +79,7 @@ layui.use(['table', 'jquery','form', 'admin'], function() {
 		},
 
 		Recommend: function() {
-			var checkStatus = table.checkStatus('articleList'),
+			var checkStatus = table.checkStatus('sysOrders'),
 				data = checkStatus.data;
 			if(data.length > 0) {
 				layer.msg("您点击了推荐操作");
@@ -162,7 +140,7 @@ function ReTable(){
     var sDateV = $("#start").val();
     var eDateV = $("#end").val();
     var searchV = $("#search").val();
-    table.reload('articleList', {
+    table.reload('sysOrders', {
         where: {searchValue:searchV, sDate:sDateV,eDate:eDateV},
         page: {
             curr: 1 //重新从第 1 页开始
