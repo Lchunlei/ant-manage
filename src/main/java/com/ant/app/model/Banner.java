@@ -10,6 +10,18 @@ public class Banner{
     private Integer channelId;
     private Date createTime;
 
+    @Override
+    public String toString() {
+        return "Banner{" +
+                "bannerId=" + bannerId +
+                ", title='" + title + '\'' +
+                ", imgUrl='" + imgUrl + '\'' +
+                ", actionUrl='" + actionUrl + '\'' +
+                ", channelId=" + channelId +
+                ", createTime=" + createTime +
+                '}';
+    }
+
     public Integer getBannerId() {
         return bannerId;
     }

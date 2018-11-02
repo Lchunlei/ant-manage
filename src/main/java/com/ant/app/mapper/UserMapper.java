@@ -1,15 +1,13 @@
 package com.ant.app.mapper;
 
-import com.ant.app.entity.req.LayuiPageReq;
+import com.ant.app.entity.req.LayUiAuToReq;
 import com.ant.app.entity.req.ReqList;
 import com.ant.app.model.UserInfo;
-import com.ant.app.sql.LayuiPageSql;
+import com.ant.app.sql.LayuiAutoPageSql;
 import com.ant.app.sql.ReqListSql;
-import com.ant.app.sql.UserSql;
 import org.apache.ibatis.annotations.*;
 import org.springframework.stereotype.Repository;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Created by liuchunlei on 2018/6/13 0027.
@@ -27,10 +25,10 @@ public interface UserMapper {
     @SelectProvider(type=ReqListSql.class, method="reqListTotal")
     int selecttotallNum(ReqList reqList);
 
-    @SelectProvider(type=LayuiPageSql.class, method="reqList")
-    List<UserInfo> selectByPage(LayuiPageReq reqList);
-    @SelectProvider(type=LayuiPageSql.class, method="reqListTotal")
-    int selectTotallNum(LayuiPageReq reqList);
+    @SelectProvider(type=LayuiAutoPageSql.class, method="reqList")
+    List<UserInfo> selectByPage(LayUiAuToReq layUiAuToReq);
+    @SelectProvider(type=LayuiAutoPageSql.class, method="reqListTotal")
+    int selectTotallNum(LayUiAuToReq layUiAuToReq);
 
     @Update("UPDATE sys_user SET status=${status} WHERE userId=${userId}")
     int updateUserStatus(@Param("status")Integer status,@Param("userId")Integer userId);

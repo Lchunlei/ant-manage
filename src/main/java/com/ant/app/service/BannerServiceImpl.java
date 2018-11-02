@@ -2,11 +2,16 @@ package com.ant.app.service;
 
 import com.ant.app.Constants;
 import com.ant.app.entity.req.BannerList;
+import com.ant.app.entity.req.LayUiAuToReq;
+import com.ant.app.entity.resp.LayUiResult;
 import com.ant.app.entity.resp.WebResult;
 import com.ant.app.mapper.BannerMapper;
 import com.ant.app.model.Banner;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+
+import java.io.File;
 import java.util.List;
 
 /**
@@ -15,6 +20,8 @@ import java.util.List;
  */
 @Service
 public class BannerServiceImpl {
+    @Value("${banner.img.save.path}")
+    private String filePath;
 
     @Autowired
     BannerMapper bannerMapper;
@@ -28,13 +35,21 @@ public class BannerServiceImpl {
     }
 
     public void deleBanner(Integer bannerId,WebResult result){
-        int i = bannerMapper.deleteBanner(bannerId);
-        if(i!=1){
+        Banner banner = bannerMapper.selectById(bannerId);
+        if(banner==null){
             result.setCode(Constants.ERROR_CODE);
-            result.setMessage(Constants.FILE_MSG);
+            result.setMessage(Constants.DATA_NULL);
         }else {
-            //删除指定静态文件
-
+            int i = bannerMapper.deleteBanner(bannerId);
+            if(i!=1){
+                result.setCode(Constants.ERROR_CODE);
+                result.setMessage(Constants.FILE_MSG);
+            }else {
+                //删除指定静态文件
+                File file=new File(filePath+banner.getImgUrl());
+                if(file.exists()&&file.isFile())
+                    file.delete();
+            }
         }
     }
 
@@ -43,21 +58,20 @@ public class BannerServiceImpl {
         if(i!=1){
             result.setCode(Constants.ERROR_CODE);
             result.setMessage(Constants.FILE_MSG);
-        }else {
-            //增加指定静态文件
-
         }
     }
 
-    public void getBannerList(BannerList bannerList,WebResult<List<Banner>> result){
-        int startNum = (bannerList.getPageNum()-1)*bannerList.getPageSize();
-        List<Banner> banners = bannerMapper.selectBypage(startNum,bannerList.getPageSize());
-        if(banners.size()>0){
-            result.setWebData(banners);
-            result.setTotal(bannerMapper.selecttotallNum());
-        }else {
-            result.setCode(Constants.ERROR_CODE);
-            result.setMessage(Constants.NOT_MORE_INFO);
+    public void getBannerList(LayUiAuToReq layUiAuToReq, LayUiResult<Banner> result){
+        layUiAuToReq.setStartNum((layUiAuToReq.getPage()-1)*10);
+        Integer totallNumAll = bannerMapper.selectTotallNum(layUiAuToReq);
+        if(totallNumAll>0){
+            result.setData(bannerMapper.selectByPage(layUiAuToReq));
+            result.setCount(totallNumAll);
+            result.setMsg(Constants.SUCCESS_MSG);
+            result.setCode(Constants.PAGE_OK_CODE);
+        }else{
+            result.setMsg(Constants.NOT_MORE_INFO);
+            result.setCode(Constants.PAGE_ERROR_CODE);
         }
     }
 

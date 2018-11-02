@@ -1,9 +1,11 @@
 package com.ant.app.service;
 
 import com.ant.app.Constants;
+import com.ant.app.entity.req.LayUiAuToReq;
 import com.ant.app.entity.req.LayuiPageReq;
 import com.ant.app.entity.req.ReqList;
 import com.ant.app.entity.req.UserList;
+import com.ant.app.entity.resp.LayUiResult;
 import com.ant.app.entity.resp.WebResult;
 import com.ant.app.mapper.UserMapper;
 import com.ant.app.model.UserInfo;
@@ -39,15 +41,17 @@ public class UserServiceImpl {
 
     }
 
-    public void getUserList(LayuiPageReq reqList, WebResult<List<UserInfo>> result){
-        reqList.setStartNum((reqList.getPageNum()-1)*10);
-        List<UserInfo> userInfos = userMapper.selectByPage(reqList);
-        if(userInfos.size()==0){
-            result.setCode(Constants.ERROR_CODE);
-            result.setMessage(Constants.NOT_MORE_INFO);
+    public void getUserList(LayUiAuToReq layUiAuToReq, LayUiResult<UserInfo> result){
+        layUiAuToReq.setStartNum((layUiAuToReq.getPage()-1)*10);
+        Integer totallNumAll = userMapper.selectTotallNum(layUiAuToReq);
+        if(totallNumAll>0){
+            result.setCode(0);
+            result.setMsg("成功");
+            result.setCount(totallNumAll);
+            result.setData(userMapper.selectByPage(layUiAuToReq));
         }else{
-            result.setWebData(userInfos);
-            result.setTotal(userMapper.selectTotallNum(reqList));
+            result.setCode(Constants.PAGE_ERROR_CODE);
+            result.setMsg(Constants.NOT_MORE_INFO);
         }
 
     }

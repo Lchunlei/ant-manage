@@ -29,4 +29,9 @@ public class SysTable {
     public static final String SYS_ORDER = "sys_order";
     public static final String ORDER_ID = "orderId";
 
+    public static final String YSY_BABBER = "sys_banner";
+    public static final String BANNER_ID = "bannerId";
+
+
+
 }

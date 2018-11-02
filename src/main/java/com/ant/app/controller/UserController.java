@@ -3,7 +3,9 @@ package com.ant.app.controller;
 
 import com.ant.app.Constants;
 import com.ant.app.entity.req.*;
+import com.ant.app.entity.resp.LayUiResult;
 import com.ant.app.entity.resp.WebResult;
+import com.ant.app.model.SysOrder;
 import com.ant.app.model.UserInfo;
 import com.ant.app.service.UserServiceImpl;
 import com.ant.app.systable.SysTable;
@@ -34,24 +36,15 @@ public class UserController {
     @Autowired
     UserServiceImpl userService;
 
-//    @Value("${QRPay.url}")
-//    private String url;
-    private String imgurl = "https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=2759510913,362471303&fm=27&gp=0.jpg";
-    private String actionUrl = "https://www.baidu.com/";
-
-
-    @ApiOperation(value = "用户列表", notes = "用户列表",response=String.class)
-    @ApiResponses({@ApiResponse(code = 201, message = "申请成功时返回成功信息")})
-    @RequestMapping(value = "/user/list",method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
-    public WebResult regApp(LayuiPageReq layuiPageReq){
-        WebResult<List<UserInfo>> appResult = new WebResult();
-        layuiPageReq.tableSet(SysTable.SYS_USER,SysTable.SYS_USER_KEY,SysTable.CREAT_TIME,SysTable.SYS_USER_NAME,SysTable.SYS_USER_KEY);
-        log.info("用户列表请求参数--------》"+layuiPageReq);
-        userService.getUserList(layuiPageReq,appResult);
-        log.info("--------》"+appResult.getWebData());
-        return appResult;
+    @RequestMapping(value = "/users",method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+    public LayUiResult getUsers(LayUiAuToReq layUiAuToReq){
+        log.info("users请求--------》"+layUiAuToReq);
+        layUiAuToReq.tableSet(SysTable.SYS_USER,SysTable.SYS_USER_KEY,SysTable.CREAT_TIME,SysTable.SYS_USER_NAME,SysTable.SYS_USER_KEY);
+        LayUiResult<UserInfo> layUiResult = new LayUiResult();
+        userService.getUserList(layUiAuToReq,layUiResult);
+        log.info("users--------》"+layUiResult);
+        return layUiResult;
     }
-
 
     @ApiOperation(value = "启用禁用用户", notes = "启用禁用用户",response=String.class)
     @ApiResponses({@ApiResponse(code = 201, message = "申请成功时返回成功信息")})

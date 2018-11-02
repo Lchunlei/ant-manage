@@ -12,6 +12,11 @@ public class LayUiResult<T> {
     private Integer count;
     private List<T> data;
 
+    public LayUiResult() {
+        this.code=0;
+        this.msg="成功";
+    }
+
     @Override
     public String toString() {
         return "LayUiResult{" +

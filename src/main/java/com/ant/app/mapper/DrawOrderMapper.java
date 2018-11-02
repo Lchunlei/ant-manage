@@ -32,7 +32,7 @@ public interface DrawOrderMapper {
     @SelectProvider(type=LayuiAutoPageSql.class, method="reqListTotal")
     Integer selectTotallNum(LayUiAuToReq layUiAuToReq);
 
-    @Update("UPDATE draw_order SET drawStatus=${drawStatus},bankStatus=${bankStatus},tradeDes=#{tradeDes} WHERE drawId=${drawId}")
+    @Update("UPDATE draw_order SET drawStatus=${drawStatus},bankStatus=${bankStatus},tradeDes=#{tradeDes},paymentTime=#{paymentTime} WHERE drawId=${drawId}")
     int updateDrawOrderStatus(DrawOrder drawOrder);
 
     @Select("SELECT * FROM draw_order WHERE drawId=${drawId}")

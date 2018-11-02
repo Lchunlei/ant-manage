@@ -1,6 +1,9 @@
 package com.ant.app.mapper;
 
+import com.ant.app.entity.req.LayUiAuToReq;
 import com.ant.app.model.Banner;
+import com.ant.app.model.DrawOrder;
+import com.ant.app.sql.LayuiAutoPageSql;
 import org.apache.ibatis.annotations.*;
 import org.springframework.stereotype.Repository;
 
@@ -26,6 +29,15 @@ public interface BannerMapper {
     List<Banner> selectBypage(@Param("startNum") Integer startNum, @Param("pageSize") Integer pageSize);
     @Select("SELECT COUNT(bannerId) FROM sys_banner")
     int selecttotallNum();
+
+    @Select("SELECT * FROM sys_banner WHERE bannerId=${bannerId}")
+    Banner selectById(@Param("bannerId")Integer bannerId);
+
+    @SelectProvider(type=LayuiAutoPageSql.class, method="reqList")
+    List<Banner> selectByPage(LayUiAuToReq layUiAuToReq);
+    @SelectProvider(type=LayuiAutoPageSql.class, method="reqListTotal")
+    Integer selectTotallNum(LayUiAuToReq layUiAuToReq);
+
 
 
 }
