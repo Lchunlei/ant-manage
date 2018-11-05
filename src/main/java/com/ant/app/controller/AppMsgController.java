@@ -1,8 +1,13 @@
 package com.ant.app.controller;
 
+import com.ant.app.Constants;
+import com.ant.app.entity.req.LayUiAuToReq;
+import com.ant.app.entity.resp.LayUiResult;
 import com.ant.app.entity.resp.WebResult;
 import com.ant.app.model.AppMsg;
 import com.ant.app.service.AppMsgServiceImpl;
+import com.ant.app.systable.SysTable;
+import com.ant.app.util.CheckReqUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
@@ -19,23 +24,30 @@ import org.springframework.web.bind.annotation.RestController;
  * @author lchunlei
  * @date 2018/7/11
  */
-@Api(value = "APP消息",description = "APP消息")
 @RestController
-@RequestMapping("/page/ant/msg")
+@RequestMapping("/ant/msg")
 public class AppMsgController {
     private static final Logger log = LoggerFactory.getLogger(AppMsgController.class);
 
     @Autowired
     AppMsgServiceImpl appMsgService;
 
-    @ApiOperation(value = "消息发布", notes = "消息发布",response=String.class)
-    @ApiResponses({@ApiResponse(code = 201, message = "申请成功时返回成功信息")})
     @RequestMapping(value = "/send",method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
-    public WebResult sendAppMsg(@RequestBody AppMsg appMsg){
+    public WebResult sendAppMsg(AppMsg appMsg){
         log.info("消息发布----->"+appMsg);
         WebResult result = new WebResult();
         appMsgService.inseAppMsg(appMsg,result);
         return result;
     }
 
+    @RequestMapping(value = "/list",method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+    public LayUiResult<AppMsg> getBnnerList(LayUiAuToReq layUiAuToReq){
+        log.info("-----查看消息列表--------");
+        layUiAuToReq.tableSet(SysTable.PUSH_MSG,SysTable.MSG_ID,SysTable.CREAT_TIME,SysTable.TASK_TITAL,SysTable.MSG_ID);
+        LayUiResult<AppMsg> result = new LayUiResult();
+        appMsgService.getList(layUiAuToReq,result);
+
+        log.info("查看消息列表--------》"+result);
+        return result;
+    }
 }

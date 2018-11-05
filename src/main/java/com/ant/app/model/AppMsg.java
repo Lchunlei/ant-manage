@@ -11,8 +11,11 @@ public class AppMsg {
     private String title;
     private String content;
     private Date pushtime;
+    private String pTimer;
     private Integer msgType;//0系统消息1个人消息
     private Integer userId;//个人ID
+    private String nickName;
+    private String createTime;
 
     @Override
     public String toString() {
@@ -21,9 +24,20 @@ public class AppMsg {
                 ", title='" + title + '\'' +
                 ", content='" + content + '\'' +
                 ", pushtime=" + pushtime +
+                ", pTimer='" + pTimer + '\'' +
                 ", msgType=" + msgType +
                 ", userId=" + userId +
+                ", nickName='" + nickName + '\'' +
+                ", createTime='" + createTime + '\'' +
                 '}';
+    }
+
+    public String getpTimer() {
+        return pTimer;
+    }
+
+    public void setpTimer(String pTimer) {
+        this.pTimer = pTimer;
     }
 
     public Integer getMsgId() {
@@ -72,5 +86,21 @@ public class AppMsg {
 
     public void setUserId(Integer userId) {
         this.userId = userId;
+    }
+
+    public String getNickName() {
+        return nickName;
+    }
+
+    public void setNickName(String nickName) {
+        this.nickName = nickName;
+    }
+
+    public String getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(String createTime) {
+        this.createTime = createTime;
     }
 }

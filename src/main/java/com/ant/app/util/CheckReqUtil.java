@@ -8,8 +8,12 @@ import java.util.regex.Pattern;
 public class CheckReqUtil {
 
     public static Boolean isNumber(String str){
-        Pattern pattern = Pattern.compile("^[-\\+]?[\\d]*$");
-        return pattern.matcher(str).matches();
+        if(StringTool.isRealStr(str)){
+            Pattern pattern = Pattern.compile("^[-\\+]?[\\d]*$");
+            return pattern.matcher(str).matches();
+        }else {
+            return false;
+        }
     }
 
 }

@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html>
+  
+  <head>
+    <meta charset="UTF-8">
+    <title>发布消息</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <link rel="stylesheet" href="../../static/css/font.css">
+		<link rel="stylesheet" href="../../static/css/weadmin.css">
+    <!-- 让IE8/9支持媒体查询，从而兼容栅格 -->
+    <!--[if lt IE 9]>
+      <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
+      <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+  </head>
+  
+  <body>
+    <div class="weadmin-body">
+        <form class="layui-form" id="addMsgFrom">
+
+          <div class="layui-form-item">
+              <label for="title" class="layui-form-label">
+                  <span class="we-red">*</span>标题
+              </label>
+              <div class="layui-input-inline">
+                  <input type="text" id="title" name="title" required="" lay-verify="required" autocomplete="off" class="layui-input">
+              </div>
+              <div class="layui-form-mid layui-word-aux">
+                  <span class="we-red">*</span>消息必要标题说明
+              </div>
+          </div>
+
+          <div class="layui-form-item">
+              <label for="content" class="layui-form-label">
+                  <span class="we-red">*</span>内容
+              </label>
+              <div class="layui-input-inline">
+                  <input type="text" id="content" name="content" required="" lay-verify="required" autocomplete="off" class="layui-input">
+              </div>
+              <div class="layui-form-mid layui-word-aux">
+                  <span class="we-red">*</span>内部消息体字数控制在400以内
+              </div>
+          </div>
+
+            <div class="layui-form-item">
+                <label for="pTimer" class="layui-form-label">
+                    <span class="we-red">*</span>发布时间
+                </label>
+                <div class="layui-input-inline">
+                    <input class="layui-input" placeholder="发布时间" name="pTimer" id="pTimer">
+                </div>
+                <div class="layui-form-mid layui-word-aux">
+                    <span class="we-red">*</span>平台用户接收消息时间
+                </div>
+            </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">
+                <span class="we-red">*</span>发布类别
+            </label>
+            <div class="layui-input-block">
+                <input type="radio" name="msgType" value="0" title="系统消息" checked>
+                <input type="radio" name="msgType" value="1" title="用户消息" >
+            </div>
+        </div>
+
+            <div class="layui-form-item">
+                <label for="content" class="layui-form-label">
+                    <span class="we-red">*</span>用户ID
+                </label>
+                <div class="layui-input-inline">
+                    <input class="layui-input" placeholder="用户消息必填项" name="userId" id="userId">
+                </div>
+                <div class="layui-form-mid layui-word-aux">
+                    <span class="we-red">*</span>接收消息的平台用户ID
+                </div>
+            </div>
+
+          <div class="layui-form-item">
+              <label for="addIoc" class="layui-form-label"></label>
+              <button  class="layui-btn" lay-filter="add" lay-submit="" id="addIoc">增加</button>
+          </div>
+      </form>
+    </div>
+		<script src="../../lib/layui/layui.js" charset="utf-8"></script>
+    <script type="text/javascript">
+    		layui.extend({
+					admin: '{/}../../static/js/admin'
+				});
+            layui.use(['laydate', 'jquery', 'admin'], function() {
+                var laydate = layui.laydate,
+                    $ = layui.jquery,
+                    admin = layui.admin;
+                //执行一个laydate实例
+                laydate.render({
+                    elem: '#pTimer' //指定元素
+                    ,type: 'datetime'
+                });
+            });
+        layui.use(['form','layer','jquery','upload','admin'], function(){
+          var form = layui.form,
+              $ = layui.jquery,
+          	admin = layui.admin,
+          	layer = layui.layer;
+          //自定义验证规则
+          form.verify({
+              title: function(value){
+              if(value.length < 2){
+                return '至少得2个字符啊';
+              }
+            },
+              content: function(value){
+                  if(value.length > 400 && value.length<2 ){
+                      return '2-400个字符啊';
+                  }
+              },
+              pTimer: function(value){
+                  if(value.length<2 ){
+                      return '时间必填';
+                  }
+              }
+          });
+            form.render();
+
+          //监听提交
+          form.on('submit(add)', function(data){
+              var data_req = new FormData(document.getElementById("addMsgFrom"));
+              $.ajax({
+                  url:"../../ant/msg/send"
+                  ,data:data_req
+                  ,type:"POST"
+                  ,processData:false
+                  ,contentType:false
+                  ,success:function(data_resp){
+                      if('R000'==data_resp.code){
+                          //发异步，把数据提交给php
+                          layer.alert("发布成功！", {
+                              icon: 6
+                          }, function() {
+                              // 获得frame索引
+                              var index = parent.layer.getFrameIndex(window.name);
+                              //关闭当前frame
+                              parent.layer.close(index);
+                          });
+
+                          parent.table.reload('msglist', {
+                              page: {
+                                  curr: 1 //重新从第 1 页开始
+                              }
+                          });
+                      }else {
+                          layer.msg(data_resp.message, {
+                              icon: 5,
+                              time: 1000
+                          });
+                      }
+
+                  }
+                  ,error:function(e){
+                      layer.msg('系统异常!', {
+                          icon: 5,
+                          time: 1000
+                      });
+                  }
+              });
+            // //发异步，把数据提交给php
+            // layer.alert("增加成功", {icon: 6},function () {
+            //     // 获得frame索引
+            //     var index = parent.layer.getFrameIndex(window.name);
+            //     //关闭当前frame
+            //     parent.layer.close(index);
+            // });
+            return false;
+          });
+        });
+    </script>
+  </body>
+
+</html>

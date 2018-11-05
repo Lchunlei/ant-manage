@@ -1,8 +1,13 @@
 package com.ant.app.mapper;
 
+import com.ant.app.entity.req.LayUiAuToReq;
 import com.ant.app.model.AppMsg;
+import com.ant.app.sql.LayuiAutoPageSql;
 import org.apache.ibatis.annotations.Insert;
+import org.apache.ibatis.annotations.SelectProvider;
 import org.springframework.stereotype.Repository;
+
+import java.util.List;
 
 /**
  * @author lchunlei
@@ -11,10 +16,13 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface AppMsgMapper {
 
-    @Insert("INSERT INTO push_msg(`title`, `content`,`pushtime`,`msgType`,`userId`) VALUES (#{title}, #{content},NOW(),${msgType},${userId})")
+    @Insert("INSERT INTO push_msg(`title`, `content`,`pushtime`,`msgType`,`userId`,`nickName`,`createTime`) VALUES (#{title}, #{content}, #{pushtime},${msgType},#{userId,jdbcType=VARCHAR},#{nickName,jdbcType=VARCHAR},NOW())")
     Integer insertAppMsg(AppMsg appMsg);
 
-
+    @SelectProvider(type=LayuiAutoPageSql.class, method="reqList")
+    List<AppMsg> selectByPage(LayUiAuToReq layUiAuToReq);
+    @SelectProvider(type=LayuiAutoPageSql.class, method="reqListTotal")
+    Integer selectTotallNum(LayUiAuToReq layUiAuToReq);
 
 
 

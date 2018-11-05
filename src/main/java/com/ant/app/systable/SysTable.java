@@ -32,6 +32,7 @@ public class SysTable {
     public static final String YSY_BABBER = "sys_banner";
     public static final String BANNER_ID = "bannerId";
 
-
+    public static final String PUSH_MSG = "push_msg";
+    public static final String MSG_ID = "msgId";
 
 }
