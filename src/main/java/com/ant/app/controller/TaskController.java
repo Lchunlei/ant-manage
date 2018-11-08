@@ -53,13 +53,12 @@ public class TaskController {
         return layUiResult;
     }
 
-    @ApiOperation(value = "任务状态修改", notes = "任务状态修改",response=String.class)
-    @ApiResponses({@ApiResponse(code = 201, message = "申请成功时返回成功信息")})
-    @RequestMapping(value = "/update",method = RequestMethod.GET, produces = "application/json;charset=UTF-8")
-    public WebResult updaTask(Integer taskId,Integer verifyCode){
+
+    @RequestMapping(value = "/check",method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+    public WebResult updaTask(Integer taskId,Integer verifyCode,String verifyMsg){
         WebResult<List<SysTask>> result = new WebResult();
-        log.info("任务状态修改请求参数--------》"+taskId+"***"+verifyCode);
-        taskService.updaTaskStatus(taskId,verifyCode,result);
+        log.info("任务状态修改请求参数--------》"+taskId+"***"+verifyCode+"***"+verifyMsg);
+        taskService.updaTaskStatus(taskId,verifyCode,verifyMsg,result);
         log.info("--------》"+result);
         return result;
     }

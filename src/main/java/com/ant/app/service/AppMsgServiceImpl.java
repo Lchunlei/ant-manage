@@ -9,6 +9,7 @@ import com.ant.app.mapper.UserMapper;
 import com.ant.app.model.AppMsg;
 import com.ant.app.model.UserInfo;
 import com.ant.app.util.CheckReqUtil;
+import com.ant.app.util.StringTool;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -75,6 +76,20 @@ public class AppMsgServiceImpl {
         }else{
             result.setMsg(Constants.NOT_MORE_INFO);
             result.setCode(Constants.PAGE_ERROR_CODE);
+        }
+    }
+
+    public void delMsgs(String msgids,WebResult result){
+        if(StringTool.isRealStr(msgids)){
+            try {
+                appMsgMapper.deleteMsgs(msgids);
+            }catch (Exception e){
+                result.setCode(Constants.ERROR_CODE);
+                result.setMessage(Constants.FILE_MSG);
+            }
+        }else {
+            result.setCode(Constants.ERROR_CODE);
+            result.setMessage(Constants.DATA_NULL);
         }
     }
 

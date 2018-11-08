@@ -3,7 +3,9 @@ package com.ant.app.mapper;
 import com.ant.app.entity.req.LayUiAuToReq;
 import com.ant.app.model.AppMsg;
 import com.ant.app.sql.LayuiAutoPageSql;
+import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Insert;
+import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.SelectProvider;
 import org.springframework.stereotype.Repository;
 
@@ -24,6 +26,7 @@ public interface AppMsgMapper {
     @SelectProvider(type=LayuiAutoPageSql.class, method="reqListTotal")
     Integer selectTotallNum(LayUiAuToReq layUiAuToReq);
 
-
+    @Delete("DELETE FROM push_msg WHERE msgId IN (${msgids})")
+    Integer deleteMsgs(@Param("msgids")String msgids);
 
 }

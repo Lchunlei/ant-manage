@@ -9,6 +9,7 @@ import com.ant.app.entity.resp.WebResult;
 import com.ant.app.mapper.TaskMapper;
 import com.ant.app.model.SysTask;
 import com.ant.app.util.CheckReqUtil;
+import com.ant.app.util.StringTool;
 import com.ant.app.util.TimeUtil;
 import com.mysql.jdbc.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,10 +40,16 @@ public class TaskServiceImpl {
     }
 
     //禁用任务
-    public void updaTaskStatus(Integer taskId,Integer verifyCode,WebResult result){
-        if(taskMapper.updateTaskStatus(verifyCode,taskId)<1){
-            result.setCode(Constants.ERROR_CODE);
-            result.setMessage(Constants.FILE_MSG);
+    public void updaTaskStatus(Integer taskId,Integer verifyCode,String verifyMsg,WebResult result){
+        if(verifyCode.equals(2)){
+            if(StringTool.isRealStr(verifyMsg)){
+                taskMapper.updateTaskStatus(verifyCode,taskId,verifyMsg);
+            }else {
+                result.setCode(Constants.ERROR_CODE);
+                result.setMessage(Constants.PARAM_ERROR);
+            }
+        }else {
+            taskMapper.updateTaskStatus(verifyCode,taskId,null);
         }
     }
 

@@ -36,11 +36,8 @@
               <label for="content" class="layui-form-label">
                   <span class="we-red">*</span>内容
               </label>
-              <div class="layui-input-inline">
-                  <input type="text" id="content" name="content" required="" lay-verify="required" autocomplete="off" class="layui-input">
-              </div>
-              <div class="layui-form-mid layui-word-aux">
-                  <span class="we-red">*</span>内部消息体字数控制在400以内
+              <div class="layui-input-block">
+                  <textarea placeholder="请输入内容400字以内" maxlength="450" id="content" name="content" lay-verify="required" autocomplete="off" class="layui-textarea"></textarea>
               </div>
           </div>
 
@@ -49,7 +46,7 @@
                     <span class="we-red">*</span>发布时间
                 </label>
                 <div class="layui-input-inline">
-                    <input class="layui-input" placeholder="发布时间" name="pTimer" id="pTimer">
+                    <input class="layui-input" placeholder="发布时间" lay-verify="required" autocomplete="off" name="pTimer" id="pTimer">
                 </div>
                 <div class="layui-form-mid layui-word-aux">
                     <span class="we-red">*</span>平台用户接收消息时间

@@ -8,6 +8,7 @@ import com.ant.app.model.AppMsg;
 import com.ant.app.service.AppMsgServiceImpl;
 import com.ant.app.systable.SysTable;
 import com.ant.app.util.CheckReqUtil;
+import com.ant.app.util.StringTool;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
@@ -50,4 +51,13 @@ public class AppMsgController {
         log.info("查看消息列表--------》"+result);
         return result;
     }
+
+    @RequestMapping(value = "/del",method = RequestMethod.GET, produces = "application/json;charset=UTF-8")
+    public WebResult sendAppMsg(String msgids){
+        log.info("删除消息----->"+msgids);
+        WebResult result = new WebResult();
+        appMsgService.delMsgs(msgids,result);
+        return result;
+    }
+
 }

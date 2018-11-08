@@ -27,8 +27,8 @@ public interface TaskMapper {
     @SelectProvider(type=LayuiAutoPageSql.class, method="reqListTotal")
     Integer selectTotallNum(LayUiAuToReq layUiAuToReq);
 
-    @Update("UPDATE sys_task SET verifyCode=${verifyCode} WHERE taskId=${taskId}")
-    int updateTaskStatus(@Param("verifyCode")Integer verifyCode, @Param("taskId")Integer taskId);
+    @Update("UPDATE sys_task SET verifyCode=${verifyCode},verifyMsg=#{verifyMsg,jdbcType=VARCHAR} WHERE taskId=${taskId}")
+    int updateTaskStatus(@Param("verifyCode")Integer verifyCode, @Param("taskId")Integer taskId,@Param("verifyMsg")String verifyMsg);
 
     @Insert("INSERT INTO sys_task(`userId`, `type`,`title`,`jobSeTitle`,`jobUrl`,`maxRead`,`startTime`,`endTime`,`createTime`) VALUES (${userId},${type},#{title},#{jobSeTitle},#{jobUrl},${maxRead},#{startTime},#{endTime},NOW())")
     Integer insertTask(SysTask sysTask);

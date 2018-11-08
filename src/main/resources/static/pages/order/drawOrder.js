@@ -37,9 +37,7 @@ layui.use(['table', 'jquery','form', 'admin'], function() {
 				field: 'tradeNoTo',title: '单号'
             }, {
 				field: 'getType',title: '提现渠道',templet: '#getTypeTep'
-            },{
-                field: 'aliAcc',title: '支付宝账号'
-            },  {
+            }, {
 				field: 'drawStatus',title: '状态',templet: '#drawStatusTep'
             }, {
 				field: 'amountYuan',title: '金额'

@@ -142,12 +142,7 @@
                               //关闭当前frame
                               parent.layer.close(index);
                           });
-
-                          parent.table.reload('bannerList', {
-                              page: {
-                                  curr: 1 //重新从第 1 页开始
-                              }
-                          });
+                          parent.table.reload('bannerList', {});
                       }else {
                           layer.msg(data_resp.message, {
                               icon: 5,

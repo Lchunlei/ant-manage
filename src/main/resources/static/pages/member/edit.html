@@ -119,25 +119,29 @@
 				});  
 				function frameVal(){
 					var dataId = $('input[name="dataId"]').val();
-					var index = parent.layer.getFrameIndex(window.name); 
-				    parent.layui.jquery("#memberList tr").each(function(){
-				    	if($(this).attr('data-id')==dataId){
-				    		console.log($(this));
-				    		var tdArr=$(this).children('td');
-				    		var username = tdArr.eq(2).text(); //姓名
-							var sex = tdArr.eq(3).text(); //性别
-							var phone = tdArr.eq(4).text(); //电话
-							var email = tdArr.eq(5).text(); //邮箱
-							var address = tdArr.eq(6).text(); //地址
-							
-							$('input[name="username"]').val(username);
-							console.log("sex:"+sex);
-							$('input[name="sex"][value="'+sex+'"]').attr("checked",true);
-							$('input[name="phone"]').val(phone);
-							$('input[name="email"]').val(email);
-							$('input[name="address"]').val(address);
-							form.render();
-				    	}
+					var index = parent.layer.getFrameIndex(window.name);
+
+                        parent.layui.jquery("tr").each(function(){
+                            console.log("data-id--->"+$(this).children('td').eq(1).text());
+                            if($(this).children('td').eq(1).text()==dataId){
+                                console.log("this--->"+$(this));
+                                var tdArr=$(this).children('td');
+                                console.log("tdArr--->"+tdArr);
+                                var username = tdArr.eq(2).text();
+                                console.log("username--->"+username);
+                                var sex = tdArr.eq(3).text(); //性别
+                                var phone = tdArr.eq(4).text(); //电话
+                                var email = tdArr.eq(5).text(); //邮箱
+                                var address = tdArr.eq(6).text(); //地址
+
+                                $('input[name="username"]').val(username);
+                                console.log("sex:"+sex);
+                                $('input[name="sex"][value="'+sex+'"]').attr("checked",true);
+                                $('input[name="phone"]').val(phone);
+                                $('input[name="email"]').val(email);
+                                $('input[name="address"]').val(address);
+                                form.render();
+                            }
 				    });
 				}
 				//监听提交

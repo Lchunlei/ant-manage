@@ -21,7 +21,7 @@ public class Constants {
 
     //给商户汇款
     public static final String CHECK_FIRST = "请先审核所选订单！";
-    public static final String DRAW_SUCCESS = "该订单提现成功！";
+    public static final String DRAW_SUCCESS = "该订单已提现成功！";
     public static final String WX_TO_APPID = "mch_appid";
     public static final String WX_TO_MCHID = "mchid";
     public static final String WX_TO_TRADE_NO = "partner_trade_no";
@@ -36,7 +36,7 @@ public class Constants {
     public static final String WX_PAYMENT_MOUNT = "payment_amount";
     public static final String WX_NONCE_STR = "nonce_str";
     public static final String WX_CREATE_IP = "spbill_create_ip";
-    public static final String MONEY_TO_ANT_DES = "平台提现";
+    public static final String MONEY_TO_ANT_DES = "小蚂蚁提现成功";
     public static final String PAY_SUCCESS_CODE = "SUCCESS";
     public static final String PAY_RESULT_CODE = "result_code";
     public static final String GET_MONEY_STATUS = "status";

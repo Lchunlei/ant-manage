@@ -75,6 +75,8 @@ public class DrawOrderServiceImpl {
                     order.setPaymentTime(new Date());//初始化提现时间
                     if(StringTool.isRealStr(drawOrder.getTradeDes())){
                         order.setTradeDes(drawOrder.getTradeDes());
+                    }else {
+                        order.setTradeDes(Constants.MONEY_TO_ANT_DES);
                     }
                     if(drawOrder.getDrawStatus().equals(1)){
                         //返现审核通过
@@ -87,7 +89,7 @@ public class DrawOrderServiceImpl {
                             data.put(Constants.WX_NONCE_STR, WXPayUtil.generateUUID());
                             data.put(Constants.WX_TO_CHECK_NAME, Constants.WX_TO_CHECK_NAME_VALUE);
                             data.put(Constants.WX_TO_OPEN_ID,order.getOpenId());
-                            data.put(Constants.WX_TO_DESC,Constants.MONEY_TO_ANT_DES);
+                            data.put(Constants.WX_TO_DESC,order.getTradeDes());
                             data.put(Constants.WX_TO_AMOUNT,order.getAmount().toString());
                             data.put(Constants.WX_CREATE_IP,mywebIp);
 
@@ -117,6 +119,8 @@ public class DrawOrderServiceImpl {
                             result.setCode(Constants.ERROR_CODE);
                             result.setMessage(Constants.CONNECT_ERROR);
                         }
+                    }else {
+                        order.setDrawStatus(2);
                     }
                     int re = drawOrderMapper.updateDrawOrderStatus(order);
                     if(re!=1){
@@ -142,53 +146,11 @@ public class DrawOrderServiceImpl {
         if(order==null){
             result.setCode(Constants.ERROR_CODE);
             result.setMessage(Constants.DATA_NULL);
-        }else if(order.getDrawStatus().equals(0)){
-            result.setCode(Constants.ERROR_CODE);
-            result.setMessage(Constants.CHECK_FIRST);
         }else if(order.getDrawStatus().equals(1)){
+            result.setCode(Constants.ERROR_CODE);
             result.setMessage(Constants.DRAW_SUCCESS);
         }else {
-            //查询返现结果
-            try {
-                HashMap<String, String> data = new HashMap();
-                data.put(Constants.WX_TO_APPID,appIdWX);
-                data.put(Constants.WX_TO_MCHID,mchIdWX);
-                data.put(Constants.WX_TO_TRADE_NO, order.getTradeNoTo());
-                data.put(Constants.WX_NONCE_STR, WXPayUtil.generateUUID());
-
-                WXPay wxPay = WXPayClient.getWxPay(certPathWX,appIdWX,mchIdWX,keyWX);
-                Map<String, String> r = wxPay.findMoneyTo(data);
-                if(Constants.PAY_SUCCESS_CODE.equals(r.get(Constants.GET_MONEY_STATUS))){
-                    //提现成功
-                    if(!(order.getBankStatus().equals(1)&&order.getDrawStatus().equals(1))){
-                        //刷新数据库
-                        order.setDrawStatus(1);
-                        order.setBankStatus(1);
-                        order.setTradeDes(Constants.DRAW_SUCCESS);
-                        String payTime1 = r.get(Constants.WX_PAYMENT_TIME);
-                        String payTime2 = payTime1.replace("：",":");
-                        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-                        Date payTime =formatter.parse(payTime2);
-                        order.setPaymentTime(payTime);
-                        drawOrderMapper.updateDrawOrderStatus(order);
-                    }
-                    result.setMessage(Constants.DRAW_SUCCESS);
-                }else{
-                    if(StringTool.isRealStr(r.get(Constants.WX_REASON))){
-                        order.setTradeDes(r.get(Constants.WX_REASON));
-                    }else if(StringTool.isRealStr(r.get(Constants.PAY_CODE_DES))){
-                        order.setTradeDes(r.get(Constants.PAY_CODE_DES));
-                    }else {
-                        order.setTradeDes(r.get(Constants.PAY_RETURN_MSG));
-                    }
-                    result.setCode(Constants.ERROR_CODE);
-                    result.setMessage(order.getTradeDes());
-                }
-            }catch (Exception e){
-                log.error(e.getMessage(),e);
-                result.setCode(Constants.ERROR_CODE);
-                result.setMessage(Constants.CONNECT_ERROR);
-            }
+            result.setWebData(order);
         }
     }
 

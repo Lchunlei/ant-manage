@@ -74,21 +74,27 @@
 				<button class="layui-btn" data-type="Top"><i class="layui-icon">&#xe619;</i>置顶</button>
 				<button class="layui-btn" data-type="Review"><i class="layui-icon">&#xe6b2;</i>审核</button>
 				<button class="layui-btn" onclick="WeAdminShow('添加热文','./add.html',600,400)"><i class="layui-icon">&#xe61f;</i>添加</button>
-				<span class="fr" style="line-height:40px" id="totalNum"></span>
 			</div>
 			<table class="layui-hide" id="articleList"></table>
 
 			<script type="text/html" id="kindZH">
-				{{#  if(d.id < 100){ }}
-				广告
+
+			</script>
+
+			<script type="text/html" id="jobUrlTpl">
+				<a onclick="WeAdminShow('预览','{{d.jobUrl}}')"><i class="iconfont">&#xe6a2;</i>点击预览</a>
+			</script>
+
+			<script type="text/html" id="verifyCodeTpl">
+				{{#  if(d.verifyCode == 0){ }}
+				<span style="color:#007DDB">未处理</span>
+				{{#  } else if(d.verifyCode == 1) { }}
+				<span style="color:green">成功</span>
 				{{#  } else { }}
-				{{d.title}}(普通用户)
+				<span style="color:red">失败</span>
 				{{#  } }}
 			</script>
 
-			<script type="text/html" id="recommendTpl">
-				<input type="checkbox" name="zzz" lay-skin="switch" lay-text="已推荐|未推荐" {{d.recommend}}>
-			</script>
 			<script type="text/html" id="topTpl">
 				<input type="checkbox" name="show" lay-skin="switch" lay-text="已置顶|未置顶" {{d.top}}>
 			</script>
@@ -99,13 +105,15 @@
 			</script>
  			-->
 			<script type="text/html" id="operateTpl">
-				<a title="编辑" onclick="WeAdminEdit('编辑','./edit.html', 2, 600, 400)" href="javascript:;">
+				<a title="审核编辑" onclick="WeAdminEdit('审核编辑','./taskedit.html', '{{d.taskId}}', 600, 400)" href="javascript:;">
 					<i class="layui-icon">&#xe642;</i>
 				</a>
+				<!--
 				<a title="查看" onclick="WeAdminShow('查看文章','./show.html',600,400)" href="javascript:;">
 					<i class="layui-icon">&#xe63c;</i>
 				</a>
-				<a title="删除" onclick="member_del(this,'要删除的id')" href="javascript:;">
+				-->
+				<a title="立即下架" onclick="member_del(this,'{{d.taskId}}')" href="javascript:;">
 					<i class="layui-icon">&#xe640;</i>
 				</a>
 			</script>

@@ -60,20 +60,45 @@ layui.use(['table', 'jquery','form', 'admin'], function() {
 		getCheckData: function() { //获取选中数据
 			var checkStatus = table.checkStatus('msglist'),
 				data = checkStatus.data;
-			//console.log(data);
-			//layer.alert(JSON.stringify(data));
+			console.log(data[0].msgId);
 			if(data.length > 0) {
-				layer.confirm('确认要删除吗？' + JSON.stringify(data), function(index) {
-					layer.msg('删除成功', {
-						icon: 1
-					});
-					//找到所有被选中的，发异步进行删除
-					$(".layui-table-body .layui-form-checked").parents('tr').remove();
+				var msgids=data[0].msgId;
+                for ( var i = 1; i <data.length; i++){
+                    msgids=data[i].msgId+","+msgids;
+                }
+                console.log("删除得ID集合"+msgids);
+				layer.confirm('确认要删除吗？', function(index) {
+                    $.ajax({
+                        url:"../../ant/msg/del?msgids="+msgids
+                        ,type:"GET"
+                        ,processData:false
+                        ,contentType:false
+                        ,success:function(data_resp){
+                            if('R000'==data_resp.code){
+                                //发异步，把数据提交给php
+                                layer.msg('删除成功', {
+                                    icon: 1
+                                });
+                                table.reload('msglist', {});
+                            }else {
+                                layer.msg(data_resp.message, {
+                                    icon: 5,
+                                    time: 1000
+                                });
+                            }
+                        }
+                        ,error:function(e){
+                            layer.msg('系统异常!', {
+                                icon: 5,
+                                time: 1000
+                            });
+                        }
+                    });
+
 				});
 			} else {
 				layer.msg("请先选择需要删除的文章！");
 			}
-
 		},
 
 		Recommend: function() {
@@ -145,35 +170,6 @@ function ReTable(){
     });
 }
 
-function deleBanner(bannerId){
-    $.ajax({
-        url:"../../ant/banner/del?bannerId="+bannerId
-        ,type:"GET"
-        ,processData:false
-        ,contentType:false
-        ,success:function(data_resp){
-            if('R000'==data_resp.code){
-                //发异步，把数据提交给php
-                layer.alert("操作成功！", {
-                    icon: 6
-                });
-                table.reload('msglist', {
-                    page: {
-                        curr: 1 //重新从第 1 页开始
-                    }
-                });
-            }else {
-                layer.msg(data_resp.message, {
-                    icon: 5,
-                    time: 1000
-                });
-            }
-        }
-        ,error:function(e){
-            layer.msg('系统异常!', {
-                icon: 5,
-                time: 1000
-            });
-        }
-    });
+function deleMsg(msgids){
+
 }
