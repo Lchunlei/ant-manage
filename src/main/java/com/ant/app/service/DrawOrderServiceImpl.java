@@ -63,6 +63,11 @@ public class DrawOrderServiceImpl {
     }
     @Transactional
     public void updaDrawMapper(DrawOrder drawOrder, WebResult result){
+        if(!(drawOrder.getDrawStatus().equals(2)&&StringTool.isRealStr(drawOrder.getTradeDes()))){
+            result.setCode(Constants.ERROR_CODE);
+            result.setMessage(Constants.PARAM_ERROR);
+            return;
+        }
         if(!drawOrder.getDrawStatus().equals(0)){
             DrawOrder order = drawOrderMapper.selectById(drawOrder.getDrawId());
             if(order==null){
@@ -73,11 +78,7 @@ public class DrawOrderServiceImpl {
                     order.setBankStatus(1);//初始化已冲正
                     order.setDrawStatus(1);//初始化提现成功
                     order.setPaymentTime(new Date());//初始化提现时间
-                    if(StringTool.isRealStr(drawOrder.getTradeDes())){
-                        order.setTradeDes(drawOrder.getTradeDes());
-                    }else {
-                        order.setTradeDes(Constants.MONEY_TO_ANT_DES);
-                    }
+
                     if(drawOrder.getDrawStatus().equals(1)){
                         //返现审核通过
                         //立即提现
@@ -89,7 +90,7 @@ public class DrawOrderServiceImpl {
                             data.put(Constants.WX_NONCE_STR, WXPayUtil.generateUUID());
                             data.put(Constants.WX_TO_CHECK_NAME, Constants.WX_TO_CHECK_NAME_VALUE);
                             data.put(Constants.WX_TO_OPEN_ID,order.getOpenId());
-                            data.put(Constants.WX_TO_DESC,order.getTradeDes());
+                            data.put(Constants.WX_TO_DESC,Constants.MONEY_TO_ANT_DES);
                             data.put(Constants.WX_TO_AMOUNT,order.getAmount().toString());
                             data.put(Constants.WX_CREATE_IP,mywebIp);
 
@@ -118,9 +119,11 @@ public class DrawOrderServiceImpl {
                             order.setDrawStatus(2);
                             result.setCode(Constants.ERROR_CODE);
                             result.setMessage(Constants.CONNECT_ERROR);
+                            order.setTradeDes(Constants.DRAW_REFUSE);
                         }
                     }else {
                         order.setDrawStatus(2);
+                        order.setTradeDes(drawOrder.getTradeDes());
                     }
                     int re = drawOrderMapper.updateDrawOrderStatus(order);
                     if(re!=1){

@@ -35,4 +35,9 @@ public class SysTable {
     public static final String PUSH_MSG = "push_msg";
     public static final String MSG_ID = "msgId";
 
+    public static final String APP_VERSION = "app_version";
+    public static final String VER_CODE = "versionCode";
+    public static final String VER_NAME = "verisonName";
+
+
 }

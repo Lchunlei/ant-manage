@@ -53,33 +53,17 @@
 				</div>
 				<div class="layui-form-item">
 					<label for="tradeDes" class="layui-form-label">审批意见</label>
-					<div class="layui-input-inline">
-						<input type="text" id="tradeDes" name="tradeDes" class="layui-input">
+					<div class="layui-input-block" id="tradeDes">
+						<select name="tradeDes" lay-filter="aihao">
+							<option value="">请选择</option>
+							<option value="资金流水异常">资金流水异常</option>
+							<option value="提现金额异常">提现金额异常</option>
+							<option value="提现账户与绑定账户不一致">提现账户与绑定账户不一致</option>
+							<option value="提现失败，请与客服联系">提现失败，请与客服联系</option>
+						</select>
 					</div>
 				</div>
-				<!--
-				<div class="layui-form-item">
-					<label class="layui-form-label"><span class="we-red">*</span>旧密码</label>
-					<div class="layui-input-inline">
-						<input type="password" id="L_pass" name="oldpass" required="" lay-verify="required" autocomplete="off" class="layui-input">
-					</div>
-				</div>
-				<div class="layui-form-item">
-					<label for="L_pass" class="layui-form-label"><span class="we-red">*</span>新密码</label>
-					<div class="layui-input-inline">
-						<input type="password" id="L_pass1" name="newpass" required="" lay-verify="required" autocomplete="off" class="layui-input">
-					</div>
-					<div class="layui-form-mid layui-word-aux">
-						6到16个字符
-					</div>
-				</div>
-				<div class="layui-form-item">
-					<label class="layui-form-label"><span class="we-red">*</span>确认密码</label>
-					<div class="layui-input-inline">
-						<input type="password" id="L_repass2" name="repass" required="" lay-verify="required" autocomplete="off" class="layui-input">
-					</div>
-				</div>
-				-->
+
 				<div class="layui-form-item">
 					<label class="layui-form-label"></label>
 					<button class="layui-btn" lay-filter="saveDrawStatu" lay-submit="">确定</button>

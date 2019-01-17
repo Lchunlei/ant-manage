@@ -12,12 +12,14 @@ public class Constants {
     public static final String USER_TOLE_A = "admin";
     public static final String USER_TOLE_B = "general";
     public static final String NOT_MORE_INFO = "没有更多数据";
+    public static final String DATA_REPEAT = "数据存在重复冲突";
     public static final String DB_ERROR = "本地数据库异常";
     public static final String CONNECT_ERROR = "网络繁忙，请稍候";
     public static final String PARAM_ERROR = "参数错误，请重新输入！";
     public static final String PWD_SALT = "xmy2018";
     public static final String HAD_HANDLE = "暂无";
     public static final String UP_FORMAT_ERR = "上传文件不合规！";
+    public static final String DRAW_REFUSE = "提现被拒绝！001";
 
     //给商户汇款
     public static final String CHECK_FIRST = "请先审核所选订单！";
@@ -36,7 +38,7 @@ public class Constants {
     public static final String WX_PAYMENT_MOUNT = "payment_amount";
     public static final String WX_NONCE_STR = "nonce_str";
     public static final String WX_CREATE_IP = "spbill_create_ip";
-    public static final String MONEY_TO_ANT_DES = "小蚂蚁提现成功";
+    public static final String MONEY_TO_ANT_DES = "小蚂蚁平台提现";
     public static final String PAY_SUCCESS_CODE = "SUCCESS";
     public static final String PAY_RESULT_CODE = "result_code";
     public static final String GET_MONEY_STATUS = "status";

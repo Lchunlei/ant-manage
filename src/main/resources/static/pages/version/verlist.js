@@ -22,32 +22,26 @@ layui.use(['table', 'jquery','form', 'admin'], function() {
 		form = layui.form,
 		admin = layui.admin;
 	table.render({
-		elem: '#sysOrders',
-        url:'../../ant/sys/order/list',
+		elem: '#verlist',
+        url:'../../ant/app/version/verlist',
         method:'post',
 		cellMinWidth: 80,
 		cols: [
 			[{
 				type: 'checkbox'
 			}, {
-				field: 'orderId',width: 60,title: 'ID'
+				field: 'versionCode',width: 60,title: 'ID'
 			}, {
-				field: 'nickName',width: 100,title: '用户昵称'
+				field: 'verisonName',title: '版本名称'
 			}, {
-                field: 'tradeNo',title: '订单号'
+                field: 'platform',title: '版本平台',toolbar: '#platformTpl'
             }, {
-				field: 'totalFeeYuan',width: 90,title: '金额'
+				field: 'downloadUrl',width: 250,title: '下载地址'
             }, {
-				field: 'buyType',width: 60,title: '类型',templet: '#buyTypeTep'
+				field: 'updateMsg',width: 250,title: '版本说明'
             }, {
-				field: 'tradeStatus',width: 100,title: '状态',templet: '#tradeStatusTep'
-            }, {
-				field: 'tradeDes',title: '订单说明'
-            }, {
-                field: 'cTime',width: 200,title: '创建时间'
-            }, {
-				field: 'operate',title: '操作',toolbar: '#operateTpl',unresize: true
-			}]
+                field: 'createTime',title: '创建时间'
+            }]
 		],
 		event: true,
 		page: true
@@ -60,26 +54,51 @@ layui.use(['table', 'jquery','form', 'admin'], function() {
 	var active = {
 
 		getCheckData: function() { //获取选中数据
-			var checkStatus = table.checkStatus('sysOrders'),
+			var checkStatus = table.checkStatus('verlist'),
 				data = checkStatus.data;
-			//console.log(data);
-			//layer.alert(JSON.stringify(data));
+			console.log(data[0].msgId);
 			if(data.length > 0) {
-				layer.confirm('确认要删除吗？' + JSON.stringify(data), function(index) {
-					layer.msg('删除成功', {
-						icon: 1
-					});
-					//找到所有被选中的，发异步进行删除
-					$(".layui-table-body .layui-form-checked").parents('tr').remove();
+				var msgids=data[0].msgId;
+                for ( var i = 1; i <data.length; i++){
+                    msgids=data[i].msgId+","+msgids;
+                }
+                console.log("删除得ID集合"+msgids);
+				layer.confirm('确认要删除吗？', function(index) {
+                    $.ajax({
+                        url:"../../ant/msg/del?msgids="+msgids
+                        ,type:"GET"
+                        ,processData:false
+                        ,contentType:false
+                        ,success:function(data_resp){
+                            if('R000'==data_resp.code){
+                                //发异步，把数据提交给php
+                                layer.msg('删除成功', {
+                                    icon: 1
+                                });
+                                table.reload('msglist', {});
+                            }else {
+                                layer.msg(data_resp.message, {
+                                    icon: 5,
+                                    time: 1000
+                                });
+                            }
+                        }
+                        ,error:function(e){
+                            layer.msg('系统异常!', {
+                                icon: 5,
+                                time: 1000
+                            });
+                        }
+                    });
+
 				});
 			} else {
 				layer.msg("请先选择需要删除的文章！");
 			}
-
 		},
 
 		Recommend: function() {
-			var checkStatus = table.checkStatus('sysOrders'),
+			var checkStatus = table.checkStatus('verlist'),
 				data = checkStatus.data;
 			if(data.length > 0) {
 				layer.msg("您点击了推荐操作");
@@ -102,8 +121,7 @@ layui.use(['table', 'jquery','form', 'admin'], function() {
 		},
 		Review: function() {
 			layer.msg("您点击了审核操作");
-		}
-
+		},
 	};
 
 	$('.demoTable .layui-btn').on('click', function() {
@@ -140,10 +158,11 @@ function ReTable(){
     var sDateV = $("#start").val();
     var eDateV = $("#end").val();
     var searchV = $("#search").val();
-    table.reload('sysOrders', {
+    table.reload('verlist', {
         where: {searchValue:searchV, sDate:sDateV,eDate:eDateV},
         page: {
             curr: 1 //重新从第 1 页开始
         }
     });
 }
+

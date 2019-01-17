@@ -1,22 +1,14 @@
 package com.ant.app.controller;
 
-import com.ant.app.Constants;
 import com.ant.app.entity.req.LayUiAuToReq;
 import com.ant.app.entity.resp.LayUiResult;
 import com.ant.app.entity.resp.WebResult;
 import com.ant.app.model.AppMsg;
 import com.ant.app.service.AppMsgServiceImpl;
 import com.ant.app.systable.SysTable;
-import com.ant.app.util.CheckReqUtil;
-import com.ant.app.util.StringTool;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiResponse;
-import io.swagger.annotations.ApiResponses;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
